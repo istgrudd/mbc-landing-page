@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-base:     #EDF1F7;
+    --bg-surface:  #E4EAF4;
+    --bg-card:     #FFFFFF;
+    --text-primary:   #0D1524;
+    --text-secondary: #3A5270;
+    --text-muted:     #7A90A8;
+    --border:      #C8D4E4;
+  }
+
+  .dark {
+    --bg-base:     #070B14;
+    --bg-surface:  #0B1120;
+    --bg-card:     #111B2E;
+    --text-primary:   #DDE6F0;
+    --text-secondary: #5C7A99;
+    --text-muted:     #2E4560;
+    --border:      #1B2C42;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+@layer utilities {
+  .dot-grid {
+    background-image: radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.18) 1px,
+      transparent 1px
+    );
+    background-size: 32px 32px;
+  }
+
+  /* Crosshatch grid — very faint graph-paper in the dark */
+  .crosshatch-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+  }
+
+  .card-glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  html:not(.dark) .card-glass {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  /* Dark event island cards */
+  .card-dark {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Diagonal stripe texture overlay */
+  .diagonal-stripe-overlay {
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0,
+      transparent 48px,
+      rgba(37, 99, 235, 0.028) 48px,
+      rgba(37, 99, 235, 0.028) 49px
+    );
+  }
+}
