@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
-import "../src/index.css";
+import "./index.css";
 
 export const links = () => [
   { rel: "icon", type: "image/png", href: "/logo.png" },
