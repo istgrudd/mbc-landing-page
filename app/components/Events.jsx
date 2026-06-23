@@ -1,11 +1,16 @@
 import { motion, useReducedMotion } from 'framer-motion'
+import { Link } from 'react-router'
 import { ArrowUpRight, Check } from 'lucide-react'
-import { events } from '../data/events'
+import { getAll } from '../lib/content'
 
 const CONTACT_EMAIL = 'contact@mbclaboratory.com'
 
-// Treat the '???' placeholders in events.js as "not announced yet".
-const clean = (v) => (v && v !== '???' ? v : null)
+function formatDate(iso) {
+  if (!iso) return ''
+  const d = new Date(`${iso}T00:00:00`)
+  if (Number.isNaN(d.getTime())) return iso
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
 
 const PERKS = [
   'Work on real R&D projects, not toy assignments',
@@ -19,11 +24,12 @@ const BARCODE = [3, 1, 2, 4, 1, 2, 1, 3, 1, 4, 2, 1, 3, 1, 2, 4, 1, 1, 3, 2, 1, 
 
 export default function Events() {
   const shouldReduce = useReducedMotion()
-  const recruit = events[0]
+  const all = getAll('events')
+  const recruit = all.find((e) => e.status === 'upcoming') ?? all[0]
   if (!recruit) return null
 
-  const when = clean(recruit.date) || 'To be announced'
-  const where = clean(recruit.location) || 'Telkom University, Bandung'
+  const when = formatDate(recruit.date) || 'To be announced'
+  const where = recruit.location || 'Telkom University, Bandung'
 
   return (
     <section id="recruit" className="px-6 py-24 lg:px-10">
@@ -49,7 +55,7 @@ export default function Events() {
           <div className="flex-1 p-8 sm:p-12 lg:p-14">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/80">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-red" />
-              {recruit.tag} · Applications open soon
+              {recruit.tag ?? 'Recruitment'} · Applications open soon
             </span>
 
             <h2
@@ -87,6 +93,15 @@ export default function Events() {
                   {where}
                 </span>
               </div>
+            </div>
+
+            <div className="mt-5">
+              <Link
+                to={`/events/${recruit.slug}`}
+                className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 underline-offset-4 hover:text-white hover:underline"
+              >
+                See details →
+              </Link>
             </div>
           </div>
 

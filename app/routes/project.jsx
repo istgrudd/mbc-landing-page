@@ -1,6 +1,7 @@
 import { useLoaderData, Link } from "react-router";
 import { getBySlug } from "../lib/content";
 import Markdown from "../components/Markdown";
+import Carousel from "../components/Carousel";
 
 export async function loader({ params }) {
   const item = getBySlug("projects", params.slug);
@@ -30,7 +31,9 @@ export default function ProjectDetail() {
           <span key={t} className="rounded bg-[var(--surface-2)] px-2 py-0.5 font-mono text-[10px] text-[var(--ink-3)]">{t}</span>
         ))}
       </div>
-      {/* M5 will insert the image carousel here */}
+      <div className="mt-8">
+        <Carousel images={(item.images ?? []).slice(1, 3)} alt={item.title} />
+      </div>
       <div className="prose prose-sm sm:prose-base mt-8">
         <Markdown>{item.body}</Markdown>
       </div>

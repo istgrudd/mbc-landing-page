@@ -27,6 +27,9 @@ export default function Research() {
             to={`/research/${r.slug}`}
             className="group flex flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--ink-3)]"
           >
+            {r.images?.[0] && (
+              <img src={r.images[0]} alt={r.title} loading="lazy" className="mb-4 aspect-[16/10] w-full rounded-md object-cover" />
+            )}
             <h3 className="font-display text-lg font-bold leading-snug text-[var(--ink)] group-hover:text-brand-blue">
               {r.title}
             </h3>

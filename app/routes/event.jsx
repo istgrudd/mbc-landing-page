@@ -1,6 +1,7 @@
 import { useLoaderData, Link } from "react-router";
 import { getBySlug } from "../lib/content";
 import Markdown from "../components/Markdown";
+import Carousel from "../components/Carousel";
 
 export async function loader({ params }) {
   const item = getBySlug("events", params.slug);
@@ -43,6 +44,9 @@ export default function EventDetail() {
       <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-[var(--ink)] sm:text-4xl">{item.title}</h1>
       {item.location && <p className="mt-3 font-body text-base leading-relaxed text-[var(--ink-2)]">{item.location}</p>}
       {item.summary && <p className="mt-2 font-body text-lg leading-relaxed text-[var(--ink-2)]">{item.summary}</p>}
+      <div className="mt-8">
+        <Carousel images={(item.images ?? []).slice(1, 3)} alt={item.title} />
+      </div>
       <div className="prose prose-sm sm:prose-base mt-8">
         <Markdown>{item.body}</Markdown>
       </div>

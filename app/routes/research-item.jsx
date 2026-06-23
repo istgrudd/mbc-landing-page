@@ -1,6 +1,7 @@
 import { useLoaderData, Link } from "react-router";
 import { getBySlug } from "../lib/content";
 import Markdown from "../components/Markdown";
+import Carousel from "../components/Carousel";
 
 export async function loader({ params }) {
   const item = getBySlug("research", params.slug);
@@ -27,6 +28,9 @@ export default function ResearchDetail() {
       <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
         {item.venue}{item.venue && item.year ? " · " : ""}{item.year}
       </p>
+      <div className="mt-8">
+        <Carousel images={(item.images ?? []).slice(1, 3)} alt={item.title} />
+      </div>
       <div className="prose prose-sm sm:prose-base mt-8">
         <Markdown>{item.body}</Markdown>
       </div>

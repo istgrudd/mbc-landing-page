@@ -1,5 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
+import { Link } from 'react-router'
 import { Code2, BookOpen, Handshake } from 'lucide-react'
+import { getAll } from '../lib/content'
 import { achievements } from '../data/achievements'
 
 const COLUMNS = [
@@ -7,6 +9,13 @@ const COLUMNS = [
   { id: 'research', label: 'Research', icon: BookOpen, accent: '#8B5CF6' },
   { id: 'partnerships', label: 'Partnerships', icon: Handshake, accent: '#13A36B' },
 ]
+
+// Projects & Research are markdown-driven; Partnerships stays on achievements.js.
+const COLUMN_DATA = {
+  projects: getAll('projects'),
+  research: getAll('research'),
+  partnerships: achievements.partnerships,
+}
 
 function Entry({ children, index }) {
   const shouldReduce = useReducedMotion()
@@ -26,22 +35,24 @@ function Entry({ children, index }) {
 function ProjectEntry({ item, index, accent }) {
   return (
     <Entry index={index}>
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
-        <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
-      </div>
-      <p className="mb-3 font-body text-xs leading-relaxed text-[var(--ink-2)]">{item.description}</p>
-      <div className="flex flex-wrap gap-1.5">
-        {item.tags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded border px-2 py-0.5 font-mono text-[10px]"
-            style={{ color: accent, borderColor: `${accent}33`, backgroundColor: `${accent}12` }}
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+      <Link to={`/projects/${item.slug}`} className="block transition-opacity hover:opacity-80">
+        <div className="mb-2 flex items-start justify-between gap-2">
+          <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
+          <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
+        </div>
+        <p className="mb-3 font-body text-xs leading-relaxed text-[var(--ink-2)]">{item.summary}</p>
+        <div className="flex flex-wrap gap-1.5">
+          {(item.tags ?? []).map((tag) => (
+            <span
+              key={tag}
+              className="rounded border px-2 py-0.5 font-mono text-[10px]"
+              style={{ color: accent, borderColor: `${accent}33`, backgroundColor: `${accent}12` }}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </Link>
     </Entry>
   )
 }
@@ -49,12 +60,14 @@ function ProjectEntry({ item, index, accent }) {
 function ResearchEntry({ item, index, accent }) {
   return (
     <Entry index={index}>
-      <div className="mb-1.5 flex items-start justify-between gap-2">
-        <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
-        <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
-      </div>
-      <p className="mb-2 font-body text-xs italic text-[var(--ink-2)]">{item.authors}</p>
-      <p className="font-mono text-[11px] font-medium" style={{ color: accent }}>{item.venue}</p>
+      <Link to={`/research/${item.slug}`} className="block transition-opacity hover:opacity-80">
+        <div className="mb-1.5 flex items-start justify-between gap-2">
+          <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
+          <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
+        </div>
+        <p className="mb-2 font-body text-xs italic text-[var(--ink-2)]">{item.authors}</p>
+        <p className="font-mono text-[11px] font-medium" style={{ color: accent }}>{item.venue}</p>
+      </Link>
     </Entry>
   )
 }
@@ -102,7 +115,7 @@ export default function Achievements() {
           {COLUMNS.map((col, ci) => {
             const Icon = col.icon
             const EntryComponent = ENTRY_MAP[col.id]
-            const items = achievements[col.id]
+            const items = COLUMN_DATA[col.id]
             return (
               <motion.div
                 key={col.id}
@@ -128,8 +141,17 @@ export default function Achievements() {
                   </span>
                 </div>
                 {items.map((item, i) => (
-                  <EntryComponent key={item.id} item={item} index={i} accent={col.accent} />
+                  <EntryComponent key={item.slug ?? item.id} item={item} index={i} accent={col.accent} />
                 ))}
+                {col.id !== 'partnerships' && (
+                  <Link
+                    to={`/${col.id}`}
+                    className="block border-t border-[var(--line)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:underline"
+                    style={{ color: col.accent }}
+                  >
+                    View all →
+                  </Link>
+                )}
               </motion.div>
             )
           })}

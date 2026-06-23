@@ -34,6 +34,9 @@ export default function Events() {
             to={`/events/${e.slug}`}
             className="group flex flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--ink-3)]"
           >
+            {e.images?.[0] && (
+              <img src={e.images[0]} alt={e.title} loading="lazy" className="mb-4 aspect-[16/10] w-full rounded-md object-cover" />
+            )}
             <div className="flex items-center justify-between gap-2">
               <span className="font-mono text-[11px] text-[var(--ink-3)]">{formatDate(e.date)}</span>
               <span

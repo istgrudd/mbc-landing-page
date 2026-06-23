@@ -27,6 +27,9 @@ export default function Projects() {
             to={`/projects/${p.slug}`}
             className="group flex flex-col rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--ink-3)]"
           >
+            {p.images?.[0] && (
+              <img src={p.images[0]} alt={p.title} loading="lazy" className="mb-4 aspect-[16/10] w-full rounded-md object-cover" />
+            )}
             <div className="flex items-center justify-between gap-2 font-mono text-[11px]">
               <span className="text-brand-blue">{p.division}</span>
               <span className="text-[var(--ink-3)]">{p.year}</span>
