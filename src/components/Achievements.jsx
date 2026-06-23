@@ -1,192 +1,140 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { Code2, BookOpen, Handshake } from 'lucide-react'
 import { achievements } from '../data/achievements'
-import SectionWrapper from './SectionWrapper'
 
 const COLUMNS = [
-  {
-    id:     'projects',
-    label:  'Projects',
-    icon:   Code2,
-    accent: '#3B82F6',
-  },
-  {
-    id:     'research',
-    label:  'Research',
-    icon:   BookOpen,
-    accent: '#A855F7',
-  },
-  {
-    id:     'partnerships',
-    label:  'Partnerships',
-    icon:   Handshake,
-    accent: '#22C55E',
-  },
+  { id: 'projects', label: 'Projects', icon: Code2, accent: '#2D5BFF' },
+  { id: 'research', label: 'Research', icon: BookOpen, accent: '#8B5CF6' },
+  { id: 'partnerships', label: 'Partnerships', icon: Handshake, accent: '#13A36B' },
 ]
 
-function ProjectEntry({ item, index }) {
+function Entry({ children, index }) {
   const shouldReduce = useReducedMotion()
   return (
     <motion.div
-      initial={shouldReduce ? {} : { opacity: 0, y: 12 }}
+      initial={shouldReduce ? false : { opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: index * 0.06 }}
-      className="p-5 border-b border-[var(--border)] last:border-b-0 group"
+      className="border-b border-[var(--line)] p-5 last:border-b-0"
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
-        <h3 className="font-heading font-bold text-sm text-[var(--text-primary)] leading-snug group-hover:text-blue-400 transition-colors duration-200">
-          {item.title}
-        </h3>
-        <span className="font-mono text-[10px] text-[var(--text-muted)] tabular-nums shrink-0 mt-0.5">{item.year}</span>
+      {children}
+    </motion.div>
+  )
+}
+
+function ProjectEntry({ item, index, accent }) {
+  return (
+    <Entry index={index}>
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
+        <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
       </div>
-      <p className="font-body text-xs text-[var(--text-secondary)] leading-relaxed mb-3">
-        {item.description}
-      </p>
+      <p className="mb-3 font-body text-xs leading-relaxed text-[var(--ink-2)]">{item.description}</p>
       <div className="flex flex-wrap gap-1.5">
-        {item.tags.map(tag => (
-          <span key={tag} className="font-mono text-[10px] px-2 py-0.5 rounded border border-blue-500/20 text-blue-400 bg-blue-500/08">
+        {item.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded border px-2 py-0.5 font-mono text-[10px]"
+            style={{ color: accent, borderColor: `${accent}33`, backgroundColor: `${accent}12` }}
+          >
             {tag}
           </span>
         ))}
       </div>
-    </motion.div>
+    </Entry>
   )
 }
 
-function ResearchEntry({ item, index }) {
-  const shouldReduce = useReducedMotion()
+function ResearchEntry({ item, index, accent }) {
   return (
-    <motion.div
-      initial={shouldReduce ? {} : { opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: index * 0.06 }}
-      className="p-5 border-b border-[var(--border)] last:border-b-0 group"
-    >
-      <div className="flex items-start justify-between gap-2 mb-1.5">
-        <h3 className="font-heading font-bold text-sm text-[var(--text-primary)] leading-snug group-hover:text-purple-400 transition-colors duration-200">
-          {item.title}
-        </h3>
-        <span className="font-mono text-[10px] text-[var(--text-muted)] tabular-nums shrink-0 mt-0.5">{item.year}</span>
+    <Entry index={index}>
+      <div className="mb-1.5 flex items-start justify-between gap-2">
+        <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
+        <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
       </div>
-      <p className="font-body text-xs text-[var(--text-secondary)] italic mb-2">{item.authors}</p>
-      <p className="font-mono text-[11px] text-purple-400 font-medium">{item.venue}</p>
-    </motion.div>
+      <p className="mb-2 font-body text-xs italic text-[var(--ink-2)]">{item.authors}</p>
+      <p className="font-mono text-[11px] font-medium" style={{ color: accent }}>{item.venue}</p>
+    </Entry>
   )
 }
 
-function PartnershipEntry({ item, index }) {
-  const shouldReduce = useReducedMotion()
+function PartnershipEntry({ item, index, accent }) {
   return (
-    <motion.div
-      initial={shouldReduce ? {} : { opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: index * 0.06 }}
-      className="p-5 border-b border-[var(--border)] last:border-b-0 group"
-    >
-      <div className="flex items-start justify-between gap-2 mb-1">
-        <h3 className="font-heading font-bold text-sm text-[var(--text-primary)] leading-snug group-hover:text-green-400 transition-colors duration-200">
-          {item.org}
-        </h3>
-        <span className="font-mono text-[10px] text-[var(--text-muted)] tabular-nums shrink-0 mt-0.5">{item.year}</span>
+    <Entry index={index}>
+      <div className="mb-1 flex items-start justify-between gap-2">
+        <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.org}</h3>
+        <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
       </div>
-      <p className="font-mono text-[11px] text-green-400 font-medium mb-1.5">{item.event}</p>
-      <p className="font-body text-xs text-[var(--text-secondary)] leading-relaxed">{item.description}</p>
-    </motion.div>
+      <p className="mb-1.5 font-mono text-[11px] font-medium" style={{ color: accent }}>{item.event}</p>
+      <p className="font-body text-xs leading-relaxed text-[var(--ink-2)]">{item.description}</p>
+    </Entry>
   )
 }
 
-const ENTRY_MAP = {
-  projects:     ProjectEntry,
-  research:     ResearchEntry,
-  partnerships: PartnershipEntry,
-}
+const ENTRY_MAP = { projects: ProjectEntry, research: ResearchEntry, partnerships: PartnershipEntry }
 
 export default function Achievements() {
   const shouldReduce = useReducedMotion()
 
   return (
-    <SectionWrapper id="achievements" className="relative py-24 px-6 bg-[var(--bg-surface)] overflow-hidden">
-
-      {/* Faint section watermark */}
-      <div aria-hidden="true" className="absolute right-8 top-12 font-heading font-black leading-none text-[var(--text-primary)] opacity-[0.025] select-none pointer-events-none"
-        style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
-        02
-      </div>
-
-      {/* Corner glow */}
-      <div aria-hidden="true" className="absolute bottom-0 right-0 w-96 h-96 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at bottom right, rgba(37,99,235,0.06) 0%, transparent 70%)' }}
-      />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-
-        {/* Header */}
+    <section id="work" className="relative overflow-hidden bg-[var(--paper)] px-6 py-24 lg:px-10">
+      <div className="mx-auto max-w-page">
         <motion.div
-          initial={shouldReduce ? {} : { opacity: 0, y: 20 }}
+          initial={shouldReduce ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-14"
+          className="mb-14 max-w-2xl"
         >
-          <p className="font-mono text-[11px] tracking-[0.32em] text-[var(--text-muted)] uppercase mb-4">
-            § What We&rsquo;ve Built
+          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--ink-3)]">
+            Selected work
           </p>
           <h2
-            className="font-heading font-extrabold text-[var(--text-primary)] leading-tight"
-            style={{ fontSize: 'clamp(2.25rem, 4vw, 3.5rem)' }}
+            className="font-display font-extrabold leading-[0.95] tracking-tight text-[var(--ink)]"
+            style={{ fontSize: 'clamp(2.25rem, 4.2vw, 3.75rem)' }}
           >
-            Achievements
+            Shipped, published, partnered.
           </h2>
         </motion.div>
 
-        {/* 3-column ledger */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {COLUMNS.map((col, ci) => {
             const Icon = col.icon
             const EntryComponent = ENTRY_MAP[col.id]
             const items = achievements[col.id]
-
             return (
               <motion.div
                 key={col.id}
-                initial={shouldReduce ? {} : { opacity: 0, y: 24 }}
+                initial={shouldReduce ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: ci * 0.1 }}
-                className="border border-[var(--border)] rounded-2xl overflow-hidden bg-[var(--bg-card)]"
+                className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)]"
               >
-                {/* Column header */}
                 <div
-                  className="px-5 py-4 border-b border-[var(--border)] flex items-center gap-2.5"
-                  style={{ background: `${col.accent}10` }}
+                  className="flex items-center gap-2.5 border-b border-[var(--line)] px-5 py-4"
+                  style={{ backgroundColor: `${col.accent}0f` }}
                 >
-                  <Icon size={13} style={{ color: col.accent }} />
+                  <Icon size={14} style={{ color: col.accent }} />
                   <span
-                    className="font-mono text-[10px] tracking-[0.28em] uppercase font-medium"
+                    className="font-mono text-[10px] font-medium uppercase tracking-[0.24em]"
                     style={{ color: col.accent }}
                   >
                     {col.label}
                   </span>
-                  <span
-                    className="ml-auto font-mono text-[10px] tabular-nums"
-                    style={{ color: col.accent, opacity: 0.5 }}
-                  >
+                  <span className="ml-auto font-mono text-[10px] tnum" style={{ color: col.accent, opacity: 0.6 }}>
                     {items.length}
                   </span>
                 </div>
-
-                {/* Entries */}
                 {items.map((item, i) => (
-                  <EntryComponent key={item.id} item={item} index={i} />
+                  <EntryComponent key={item.id} item={item} index={i} accent={col.accent} />
                 ))}
               </motion.div>
             )
           })}
         </div>
       </div>
-    </SectionWrapper>
+    </section>
   )
 }

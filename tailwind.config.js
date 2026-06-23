@@ -5,21 +5,27 @@ export default {
   theme: {
     extend: {
       colors: {
+        house: '#2D5BFF',
         brand: {
-          blue: '#2563EB',
-          glow: '#3B82F6',
-          red: '#EF4444',
+          blue: '#1F6FD6',
+          red: '#E5341F',
         },
-        dark: {
-          base: '#0A0F1E',
-          surface: '#111827',
-          card: '#1E293B',
+        signal: {
+          sec:  '#E5484D',
+          data: '#2D5BFF',
+          gis:  '#13A36B',
+          game: '#8B5CF6',
+          prac: '#F5A524',
         },
       },
       fontFamily: {
-        heading: ['Syne', 'sans-serif'],
-        body: ['DM Sans', 'sans-serif'],
-        mono: ['IBM Plex Mono', 'monospace'],
+        display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+        heading: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+        body: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
+      maxWidth: {
+        page: '1320px',
       },
     },
   },

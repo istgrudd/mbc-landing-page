@@ -4,7 +4,7 @@ export function useTheme() {
   const [isDark, setIsDark] = useState(() => {
     const stored = localStorage.getItem('mbc-theme')
     if (stored) return stored === 'dark'
-    return true
+    return false
   })
 
   useEffect(() => {

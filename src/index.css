@@ -4,95 +4,138 @@
 
 @layer base {
   :root {
-    --bg-base:     #EDF1F7;
-    --bg-surface:  #E4EAF4;
-    --bg-card:     #FFFFFF;
-    --text-primary:   #0D1524;
-    --text-secondary: #3A5270;
-    --text-muted:     #7A90A8;
-    --border:      #C8D4E4;
+    --paper:     #F1F2F4;
+    --surface:   #FFFFFF;
+    --surface-2: #E8EAEE;
+    --ink:       #0F1320;
+    --ink-2:     #4B5564;
+    --ink-3:     #8C95A4;
+    --line:      #DEE1E7;
+    --line-2:    #C9CDD6;
+    --grain:     0.55;
+    /* Brand — from the MBC logo (blue) + active accent (red) */
+    --brand-blue: #1F6FD6;
+    --brand-red:  #E5341F;
   }
 
   .dark {
-    --bg-base:     #070B14;
-    --bg-surface:  #0B1120;
-    --bg-card:     #111B2E;
-    --text-primary:   #DDE6F0;
-    --text-secondary: #5C7A99;
-    --text-muted:     #2E4560;
-    --border:      #1B2C42;
+    --paper:     #080A0F;
+    --surface:   #10131C;
+    --surface-2: #161A26;
+    --ink:       #ECEFF4;
+    --ink-2:     #A2ABBC;
+    --ink-3:     #5A6478;
+    --line:      #20252F;
+    --line-2:    #2C3340;
+    --grain:     0.7;
   }
 
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: var(--bg-base);
-    color: var(--text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background-color: var(--paper);
+    color: var(--ink);
+    transition: background-color 0.4s ease, color 0.4s ease;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  }
+
+  ::selection {
+    background: #2D5BFF;
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #2D5BFF;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
 @layer utilities {
-  .dot-grid {
-    background-image: radial-gradient(
-      circle,
-      rgba(37, 99, 235, 0.18) 1px,
-      transparent 1px
+  /* The five-division spectrum — the brand signature */
+  .spectrum-bg {
+    background-image: linear-gradient(
+      90deg,
+      #E5484D 0%,
+      #2D5BFF 28%,
+      #13A36B 52%,
+      #8B5CF6 76%,
+      #F5A524 100%
     );
-    background-size: 32px 32px;
   }
 
-  /* Crosshatch grid — very faint graph-paper in the dark */
-  .crosshatch-grid {
+  .text-spectrum {
+    background: linear-gradient(90deg, #E5484D, #2D5BFF 28%, #13A36B 52%, #8B5CF6 76%, #F5A524);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Brand blue→red — the logo identity, used on hero + primary brand surfaces */
+  .brand-gradient {
+    background-image: linear-gradient(100deg, var(--brand-blue), var(--brand-red));
+  }
+
+  .text-brand {
+    background: linear-gradient(100deg, var(--brand-blue) 35%, var(--brand-red));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Faint engineering grid — lab graph paper */
+  .lab-grid {
     background-image:
-      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
     background-size: 72px 72px;
+    opacity: 0.5;
   }
 
-  .text-glow {
-    text-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+  /* Film/sensor grain overlay — instrument texture */
+  .grain-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: var(--grain);
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  .card-glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Scanline sweep for photo reveals */
+  .scanline {
+    background: linear-gradient(180deg, transparent, rgba(45,91,255,0.35), transparent);
   }
 
-  html:not(.dark) .card-glass {
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-  }
+  .tnum { font-variant-numeric: tabular-nums; }
 
-  /* Dark event island cards */
-  .card-dark {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Horizontal marquee track */
+  @keyframes marquee-x {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
   }
+  .marquee-track {
+    animation: marquee-x var(--marquee-dur, 40s) linear infinite;
+    will-change: transform;
+  }
+  .marquee-paused { animation-play-state: paused; }
 
-  /* Diagonal stripe texture overlay */
-  .diagonal-stripe-overlay {
-    background-image: repeating-linear-gradient(
-      135deg,
-      transparent 0,
-      transparent 48px,
-      rgba(37, 99, 235, 0.028) 48px,
-      rgba(37, 99, 235, 0.028) 49px
-    );
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+    html { scroll-behavior: auto; }
   }
 }

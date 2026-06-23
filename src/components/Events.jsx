@@ -1,160 +1,149 @@
-import { MapPin } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
+import { ArrowUpRight, Check } from 'lucide-react'
 import { events } from '../data/events'
-import SectionWrapper from './SectionWrapper'
 
-function getDateParts(dateStr) {
-  const d = new Date(dateStr)
-  if (isNaN(d)) return { day: '??', month: '???', year: '????' }
-  return {
-    day: String(d.getDate()).padStart(2, '0'),
-    month: d.toLocaleString('en-US', { month: 'short' }).toUpperCase(),
-    year: d.getFullYear(),
-  }
-}
+const CONTACT_EMAIL = 'contact@mbclaboratory.com'
 
-const TAG_ACCENT = {
-  Workshop:    { color: '#A855F7', text: '#A855F7' },
-  Competition: { color: '#F59E0B', text: '#F59E0B' },
-  Seminar:     { color: '#14B8A6', text: '#14B8A6' },
-  Conference:  { color: '#F43F5E', text: '#F43F5E' },
-  Recruitment: { color: '#2563EB', text: '#3B82F6' },
-}
+// Treat the '???' placeholders in events.js as "not announced yet".
+const clean = (v) => (v && v !== '???' ? v : null)
 
-function tagAccent(tag) {
-  return TAG_ACCENT[tag] || { color: '#2563EB', text: '#2563EB' }
-}
+const PERKS = [
+  'Work on real R&D projects, not toy assignments',
+  'Co-author papers and register intellectual property',
+  'Partner with industry and city government',
+  'Mentorship across all five divisions',
+]
 
-function EventCard({ event, index }) {
-  const shouldReduce = useReducedMotion()
-  const { day, month, year } = getDateParts(event.date)
-  const accent = tagAccent(event.tag)
-
-  return (
-    <motion.article
-      initial={shouldReduce ? {} : { opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: index * 0.12 }}
-      className="relative rounded-2xl overflow-hidden border border-[var(--border)] group hover:border-[var(--text-muted)] transition-colors duration-300 bg-[var(--bg-card)]"
-    >
-      {/* Colored top accent strip */}
-      <div style={{ height: 3, background: accent.color }} />
-
-      <div className="p-7 pt-6">
-        {/* Tag + year */}
-        <div className="flex justify-between items-center mb-5">
-          <span
-            className="font-mono text-[10px] tracking-[0.32em] uppercase font-medium"
-            style={{ color: accent.text }}
-          >
-            {event.tag}
-          </span>
-          <span className="font-mono text-[10px] text-[var(--text-muted)] tracking-widest">
-            {year}
-          </span>
-        </div>
-
-        {/* Giant date */}
-        <div className="flex items-baseline gap-3 mb-6">
-          <span
-            className="font-heading font-extrabold tabular-nums leading-none text-[var(--text-primary)] group-hover:text-[var(--text-primary)] transition-colors duration-300"
-            style={{ fontSize: 'clamp(4rem, 8vw, 6rem)' }}
-          >
-            {day}
-          </span>
-          <span className="font-mono text-sm text-[var(--text-muted)] tracking-[0.22em]">
-            {month}
-          </span>
-        </div>
-
-        {/* Hover glow */}
-        <div
-          aria-hidden="true"
-          className="absolute -bottom-12 -right-12 w-52 h-52 rounded-full pointer-events-none transition-opacity duration-500 opacity-0 group-hover:opacity-100"
-          style={{ background: `radial-gradient(ellipse, ${accent.color}18 0%, transparent 70%)` }}
-        />
-
-        {/* Title */}
-        <h3
-          className="font-heading font-bold text-[var(--text-primary)] leading-snug mb-3 relative z-10"
-          style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)' }}
-        >
-          {event.title}
-        </h3>
-
-        {/* Description */}
-        <p className="font-body text-sm text-[var(--text-secondary)] leading-relaxed mb-6 relative z-10">
-          {event.description}
-        </p>
-
-        {/* Location */}
-        <div className="flex items-center gap-2 relative z-10">
-          <MapPin size={11} className="text-[var(--text-muted)] shrink-0" />
-          <span className="font-mono text-[11px] text-[var(--text-muted)] tracking-wide">
-            {event.location}
-          </span>
-        </div>
-      </div>
-    </motion.article>
-  )
-}
+// faux barcode — bar widths in px
+const BARCODE = [3, 1, 2, 4, 1, 2, 1, 3, 1, 4, 2, 1, 3, 1, 2, 4, 1, 1, 3, 2, 1, 4, 2, 1, 3, 1, 2, 1, 4, 2, 1, 3]
 
 export default function Events() {
-  if (events.length === 0) return null
+  const shouldReduce = useReducedMotion()
+  const recruit = events[0]
+  if (!recruit) return null
+
+  const when = clean(recruit.date) || 'To be announced'
+  const where = clean(recruit.location) || 'Telkom University, Bandung'
 
   return (
-    <SectionWrapper id="events" className="relative py-24 px-6 overflow-hidden bg-[var(--bg-surface)]">
+    <section id="recruit" className="px-6 py-24 lg:px-10">
+      <motion.div
+        initial={shouldReduce ? false : { opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="grain-overlay relative mx-auto max-w-page overflow-hidden rounded-[28px]"
+        style={{ backgroundColor: '#0B0E16', color: '#ECEFF4' }}
+      >
+        {/* ticket colour band */}
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 z-10 h-1.5 brand-gradient" />
+        {/* ambient glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 z-0 h-80 w-80 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(31,111,214,0.35), transparent 70%)' }}
+        />
 
-      {/* Atmospheric glows */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 60% 60% at 80% 50%, rgba(37,99,235,0.07) 0%, transparent 70%)'
-      }} />
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 40% 40% at 20% 80%, rgba(168,85,247,0.05) 0%, transparent 70%)'
-      }} />
+        <div className="relative z-20 flex flex-col lg:flex-row">
+          {/* ── main ticket ─────────────────────────────────── */}
+          <div className="flex-1 p-8 sm:p-12 lg:p-14">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/80">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-red" />
+              {recruit.tag} · Applications open soon
+            </span>
 
-      <div className="max-w-6xl mx-auto relative z-10">
+            <h2
+              className="mt-6 font-display font-extrabold uppercase leading-[0.95] tracking-tight"
+              style={{ fontSize: 'clamp(2.4rem, 4.6vw, 4rem)' }}
+            >
+              Apply to <span className="text-brand">MBC Lab</span>,<br />
+              2026/2027.
+            </h2>
 
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-14"
-        >
-          <p className="font-mono text-[11px] tracking-[0.32em] text-[var(--text-muted)] uppercase mb-4">
-            § What&rsquo;s Coming
-          </p>
-          <h2
-            className="font-heading font-extrabold text-[var(--text-primary)] leading-tight"
-            style={{ fontSize: 'clamp(2.25rem, 4vw, 3.5rem)' }}
-          >
-            Upcoming Events
-          </h2>
-        </motion.div>
+            <p className="mt-6 max-w-md font-body text-base leading-relaxed text-white/70">
+              We open recruitment once a year for new assistants across all five divisions.
+              Bring curiosity; leave with shipped work, a network, and a credential.
+            </p>
 
-        {/* Cards grid */}
-        <div className={`grid gap-5 ${events.length === 1 ? 'grid-cols-1 max-w-md' : 'grid-cols-1 md:grid-cols-2'}`}>
-          {events.map((event, i) => (
-            <EventCard key={event.id} event={event} index={i} />
-          ))}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href={`mailto:${CONTACT_EMAIL}?subject=MBC%20Lab%20Recruitment%202026/2027`}
+                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-[#0B0E16] transition-transform duration-200 hover:scale-[1.03]"
+              >
+                Ask about recruitment
+                <ArrowUpRight
+                  size={15}
+                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </a>
+              <div className="flex items-center gap-5 rounded-full border border-white/15 px-5 py-3 font-mono text-[11px] text-white/70">
+                <span>
+                  <span className="text-white/40">When </span>
+                  {when}
+                </span>
+                <span className="hidden h-3 w-px bg-white/20 sm:block" />
+                <span className="hidden sm:inline">
+                  <span className="text-white/40">Where </span>
+                  {where}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── perforation (tear line + punched notches) ───── */}
+          <div className="relative w-full shrink-0 lg:w-0">
+            {/* desktop: vertical tear */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-y-10 left-0 hidden border-l-2 border-dashed border-white/25 lg:block"
+            />
+            <span aria-hidden="true" className="absolute -top-3 left-0 z-30 hidden h-6 w-6 -translate-x-1/2 rounded-full bg-[var(--paper)] lg:block" />
+            <span aria-hidden="true" className="absolute -bottom-3 left-0 z-30 hidden h-6 w-6 -translate-x-1/2 rounded-full bg-[var(--paper)] lg:block" />
+            {/* mobile: horizontal tear */}
+            <div aria-hidden="true" className="mx-8 border-t-2 border-dashed border-white/25 lg:hidden" />
+            <span aria-hidden="true" className="absolute -left-3 top-0 z-30 h-6 w-6 -translate-y-1/2 rounded-full bg-[var(--paper)] lg:hidden" />
+            <span aria-hidden="true" className="absolute -right-3 top-0 z-30 h-6 w-6 -translate-y-1/2 rounded-full bg-[var(--paper)] lg:hidden" />
+          </div>
+
+          {/* ── tear-off stub ───────────────────────────────── */}
+          <div className="flex flex-col p-8 sm:p-12 lg:w-[360px] lg:p-14">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/45">What you get</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/45">Admit one</span>
+            </div>
+
+            <ul className="mt-5 space-y-4">
+              {PERKS.map((perk, i) => (
+                <motion.li
+                  key={perk}
+                  initial={shouldReduce ? false : { opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: 0.1 + i * 0.08 }}
+                  className="flex items-start gap-3 font-body text-sm leading-relaxed text-white/85"
+                >
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/10">
+                    <Check size={12} className="text-brand-blue" />
+                  </span>
+                  {perk}
+                </motion.li>
+              ))}
+            </ul>
+
+            {/* barcode + serial */}
+            <div className="mt-auto pt-10">
+              <div className="flex h-10 items-stretch gap-[2px]" aria-hidden="true">
+                {BARCODE.map((w, i) => (
+                  <span key={i} style={{ width: `${w}px` }} className="bg-white/80" />
+                ))}
+              </div>
+              <p className="mt-2.5 font-mono text-[10px] uppercase tracking-[0.24em] text-white/40">
+                No. MBC-2627 · Season pass
+              </p>
+            </div>
+          </div>
         </div>
-
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-12 pt-8 border-t border-[var(--border)] flex justify-between items-center"
-        >
-          <span className="font-mono text-[10px] tracking-[0.22em] text-[var(--text-muted)] uppercase">
-            {events.length} event{events.length !== 1 ? 's' : ''} scheduled
-          </span>
-        </motion.div>
-      </div>
-    </SectionWrapper>
+      </motion.div>
+    </section>
   )
 }

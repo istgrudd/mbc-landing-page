@@ -1,159 +1,182 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { ArrowDown, ArrowUpRight } from 'lucide-react'
+import { members } from '../data/members'
+import MemberPhoto from './MemberPhoto'
 
-const PARTICLES = [
-  { width: 300, height: 300, top: '10%', left: '5%',  delay: 0   },
-  { width: 200, height: 200, top: '60%', left: '80%', delay: 1.5 },
-  { width: 150, height: 150, top: '30%', left: '70%', delay: 0.8 },
-  { width: 250, height: 250, top: '70%', left: '15%', delay: 2   },
-  { width: 180, height: 180, top: '5%',  left: '50%', delay: 1   },
-  { width: 120, height: 120, top: '50%', left: '45%', delay: 2.5 },
+const STATS = [
+  ['53', 'assistants'],
+  ['5', 'divisions'],
+  ['8', 'HKI works'],
+  ['3', 'papers'],
 ]
 
-const DIVISIONS = [
-  { text: 'Cyber Security',        color: 'text-red-400',    glow: 'rgba(248,113,113,0.4)'  },
-  { text: 'Big Data',              color: 'text-blue-400',   glow: 'rgba(96,165,250,0.4)'   },
-  { text: 'Geographic Info',       color: 'text-green-400',  glow: 'rgba(74,222,128,0.4)'   },
-  { text: 'Game Technology',       color: 'text-purple-400', glow: 'rgba(192,132,252,0.4)'  },
-  { text: 'Practicum',             color: 'text-yellow-400', glow: 'rgba(251,191,36,0.4)'   },
-]
+// Real group photo; the member-portrait mosaic stays as a fallback.
+const GROUP_PHOTO = '/photos/all-member-1.jpeg'
+const tiles = [...members, ...members]
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } },
+function MemberMosaic() {
+  return (
+    <div aria-hidden="true" className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6">
+      {tiles.map((m, i) => (
+        <div key={`${m.id}-${i}`} className="relative aspect-[3/4]">
+          <MemberPhoto member={m} bare className="h-full w-full" />
+        </div>
+      ))}
+    </div>
+  )
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
+function HeroBackground() {
+  const shouldReduce = useReducedMotion()
+  const [loaded, setLoaded] = useState(false)
+  return (
+    <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+      <MemberMosaic />
+      <motion.img
+        src={GROUP_PHOTO}
+        alt=""
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(false)}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.8s ease' }}
+        initial={false}
+        animate={shouldReduce ? {} : { scale: [1.04, 1.12] }}
+        transition={shouldReduce ? {} : { duration: 24, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
+      />
+    </div>
+  )
+}
+
+const container = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
+}
+const rise = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 }
 
 export default function Hero() {
   const shouldReduce = useReducedMotion()
-  const [divIndex, setDivIndex] = useState(0)
-
-  useEffect(() => {
-    if (shouldReduce) return
-    const id = setInterval(() => setDivIndex(i => (i + 1) % DIVISIONS.length), 2800)
-    return () => clearInterval(id)
-  }, [shouldReduce])
-
-  const current = DIVISIONS[divIndex]
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden dot-grid">
-      {!shouldReduce &&
-        PARTICLES.map((p, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-brand-blue opacity-10 blur-3xl pointer-events-none"
-            style={{ width: p.width, height: p.height, top: p.top, left: p.left }}
-            animate={{ y: [0, -30, 0], opacity: [0.08, 0.15, 0.08] }}
-            transition={{ duration: 6 + i, repeat: Infinity, ease: 'easeInOut', delay: p.delay }}
-          />
-        ))}
+    <section
+      id="top"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080A0F] text-white"
+    >
+      <HeroBackground />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-dark-base/80 pointer-events-none" />
+      {/* legibility scrim: vertical gradient + darkened centre + faint brand glow */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(8,10,15,0.82) 0%, rgba(8,10,15,0.55) 34%, rgba(8,10,15,0.6) 64%, rgba(8,10,15,0.93) 100%)',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 82% 56% at 50% 44%, rgba(8,10,15,0.55), transparent 76%)' }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(31,111,214,0.22), transparent 72%)' }}
+      />
 
+      {/* ── centered content ──────────────────────────────── */}
       <motion.div
-        className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
+        variants={shouldReduce ? undefined : container}
+        initial={shouldReduce ? false : 'hidden'}
         animate="visible"
+        className="relative z-10 mx-auto max-w-4xl px-6 text-center"
       >
-        <motion.img
-          variants={shouldReduce ? {} : itemVariants}
-          src="/logo.png"
-          alt="MBC Lab logo"
-          className="h-20 w-auto mb-10 drop-shadow-lg"
-        />
-
-        {/* Eyebrow */}
-        <motion.p
-          variants={shouldReduce ? {} : itemVariants}
-          className="font-body text-sm sm:text-base text-slate-400 uppercase tracking-[0.35em] mb-4 select-none"
-        >
-          Center of
-        </motion.p>
-
-        {/* Cycling division name */}
-        <motion.div
-          variants={shouldReduce ? {} : itemVariants}
-          className="relative mb-3 min-h-[3.5rem] sm:min-h-[4.5rem] md:min-h-[5.5rem] flex items-center justify-center"
-        >
-          <AnimatePresence mode="wait">
-            <motion.h1
-              key={divIndex}
-              initial={shouldReduce ? {} : { opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={shouldReduce ? {} : { opacity: 0, y: -28 }}
-              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-              className={`font-heading font-extrabold text-5xl sm:text-6xl md:text-7xl leading-tight ${current.color}`}
-              style={{ textShadow: `0 0 60px ${current.glow}` }}
-            >
-              {current.text}
-            </motion.h1>
-          </AnimatePresence>
+        <motion.div variants={shouldReduce ? undefined : rise} className="mb-7 flex items-center justify-center gap-3">
+          <span className="h-px w-8 brand-gradient" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/75">
+            Multimedia · Big Data · Cyber Security
+          </span>
+          <span className="h-px w-8 brand-gradient" />
         </motion.div>
 
-        {/* Division indicator dots */}
-        <motion.div
-          variants={shouldReduce ? {} : itemVariants}
-          className="flex items-center gap-2 mb-8"
+        <motion.h1
+          variants={shouldReduce ? undefined : rise}
+          className="font-display font-extrabold uppercase leading-[0.88] tracking-tight"
+          style={{ fontSize: 'clamp(3.2rem, 9vw, 7.5rem)', textShadow: '0 2px 50px rgba(0,0,0,0.5)' }}
         >
-          {DIVISIONS.map((d, i) => (
-            <button
-              key={i}
-              onClick={() => setDivIndex(i)}
-              aria-label={`Show ${d.text}`}
-              className={`transition-all duration-300 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-glow ${
-                i === divIndex
-                  ? `w-6 h-1.5 ${d.color.replace('text-', 'bg-')}`
-                  : 'w-1.5 h-1.5 bg-slate-600 hover:bg-slate-400'
-              }`}
-            />
-          ))}
-        </motion.div>
+          <span className="text-brand">MBC</span>
+          <br />
+          Laboratory
+        </motion.h1>
 
         <motion.p
-          variants={shouldReduce ? {} : itemVariants}
-          className="font-body text-base sm:text-lg text-slate-400 max-w-xl mb-10 leading-relaxed"
+          variants={shouldReduce ? undefined : rise}
+          className="mx-auto mt-8 max-w-[52ch] font-body text-base leading-relaxed text-white/80 sm:text-lg"
         >
-          A research and development laboratory at Telkom University pushing the frontiers of
-          technology, innovation, and applied science.
+          The Multimedia, Big Data &amp; Cyber Security laboratory at Telkom University — a
+          student research group turning coursework into security tools, data platforms, maps,
+          and games.
         </motion.p>
 
         <motion.div
-          variants={shouldReduce ? {} : itemVariants}
-          className="flex flex-col sm:flex-row gap-4"
+          variants={shouldReduce ? undefined : rise}
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
         >
           <a
-            href="#about"
-            className="px-8 py-3 rounded-lg bg-brand-blue text-white font-heading font-semibold text-sm tracking-wide hover:bg-brand-glow transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-glow focus-visible:outline-none"
+            href="#members"
+            className="group inline-flex items-center gap-2 rounded-full bg-brand-blue px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-white transition-transform duration-200 hover:scale-[1.03]"
           >
-            Explore
+            Meet the team
+            <ArrowUpRight
+              size={15}
+              className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
           </a>
           <a
-            href="mailto:mbc@telkomuniversity.ac.id"
-            className="px-8 py-3 rounded-lg border border-brand-blue text-brand-blue font-heading font-semibold text-sm tracking-wide hover:bg-brand-blue/10 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-glow focus-visible:outline-none"
+            href="#divisions"
+            className="inline-flex items-center gap-2 rounded-full border border-white/35 px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-white transition-colors duration-200 hover:border-white hover:bg-white/10"
           >
-            Join Us
+            Explore divisions
           </a>
         </motion.div>
       </motion.div>
 
-      {!shouldReduce && (
-        <motion.a
-          href="#about"
-          aria-label="Scroll to About section"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-brand-blue transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-glow rounded"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+      {/* ── stat strip, anchored bottom ───────────────────── */}
+      <motion.dl
+        initial={shouldReduce ? false : { opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-14 left-1/2 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-6 gap-y-2 rounded-2xl border border-white/15 bg-black/30 px-6 py-3 backdrop-blur-md"
+      >
+        {STATS.map(([v, l], i) => (
+          <div key={l} className="flex items-center gap-2">
+            {i > 0 && <span className="mr-5 hidden h-1 w-1 rounded-full bg-brand-red sm:block" />}
+            <span className="font-mono text-lg font-medium tnum text-white">{v}</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">{l}</span>
+          </div>
+        ))}
+      </motion.dl>
+
+      {/* scroll cue */}
+      <motion.a
+        href="#about"
+        aria-label="Scroll to about"
+        initial={shouldReduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60"
+      >
+        <motion.span
+          animate={shouldReduce ? {} : { y: [0, 7, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+          className="block"
         >
-          <ChevronDown size={28} />
-        </motion.a>
-      )}
-    </div>
+          <ArrowDown size={18} />
+        </motion.span>
+      </motion.a>
+    </section>
   )
 }
