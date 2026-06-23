@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react'
 
 export function useTheme() {
   const [isDark, setIsDark] = useState(() => {
-    const stored = localStorage.getItem('mbc-theme')
-    if (stored) return stored === 'dark'
-    return false
+    if (typeof document === 'undefined') return false // build/prerender (Node)
+    return document.documentElement.classList.contains('dark')
   })
 
   useEffect(() => {

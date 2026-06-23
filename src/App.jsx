@@ -10,7 +10,6 @@ import Events from './components/Events'
 import Footer from './components/Footer'
 import FloatingThemeToggle from './components/FloatingThemeToggle'
 import { useTheme } from './hooks/useTheme'
-import './index.css'
 
 export default function App() {
   const { isDark, toggle } = useTheme()
