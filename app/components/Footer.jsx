@@ -3,11 +3,11 @@ import { divisions } from '../data/divisions'
 const CONTACT_EMAIL = 'contact@mbclaboratory.com'
 
 const EXPLORE = [
-  ['About', '#about'],
-  ['Divisions', '#divisions'],
-  ['People', '#members'],
-  ['Work', '#work'],
-  ['Recruitment', '#recruit'],
+  ['About', '/#about'],
+  ['Divisions', '/#divisions'],
+  ['People', '/#members'],
+  ['Work', '/#work'],
+  ['Recruitment', '/#recruit'],
 ]
 
 export default function Footer() {
@@ -34,7 +34,7 @@ export default function Footer() {
               {divisions.map((d) => (
                 <li key={d.id}>
                   <a
-                    href="#divisions"
+                    href="/#divisions"
                     className="group flex items-center gap-2.5 font-body text-sm text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
                   >
                     <span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />

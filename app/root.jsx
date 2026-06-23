@@ -1,5 +1,18 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  Link,
+  isRouteErrorResponse,
+  useRouteError,
+} from "react-router";
 import "./index.css";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
+import FloatingThemeToggle from "./components/FloatingThemeToggle";
+import { useTheme } from "./hooks/useTheme";
 
 export const links = () => [
   { rel: "icon", type: "image/png", href: "/logo.png" },
@@ -42,6 +55,34 @@ export function Layout({ children }) {
   );
 }
 
-export default function Root() {
-  return <Outlet />;
+export default function App() {
+  const { isDark, toggle } = useTheme();
+  return (
+    <>
+      <Nav />
+      <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
+        <Outlet />
+      </main>
+      <Footer />
+      <FloatingThemeToggle isDark={isDark} onToggle={toggle} />
+    </>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const is404 = isRouteErrorResponse(error) && error.status === 404;
+  return (
+    <main className="mx-auto max-w-page px-6 pt-32 pb-20 text-center">
+      <h1 className="font-display text-3xl font-bold text-[var(--ink)]">
+        {is404 ? "Page not found" : "Something went wrong"}
+      </h1>
+      <Link
+        to="/"
+        className="mt-6 inline-block font-mono text-xs uppercase tracking-[0.2em] text-brand-blue hover:underline"
+      >
+        ← Back home
+      </Link>
+    </main>
+  );
 }

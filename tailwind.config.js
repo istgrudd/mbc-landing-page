@@ -1,9 +1,32 @@
+import typography from '@tailwindcss/typography'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./app/**/*.{js,jsx}'],
   darkMode: 'class',
   theme: {
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            '--tw-prose-body': 'var(--ink-2)',
+            '--tw-prose-headings': 'var(--ink)',
+            '--tw-prose-links': 'var(--brand-blue)',
+            '--tw-prose-bold': 'var(--ink)',
+            '--tw-prose-bullets': 'var(--ink-3)',
+            '--tw-prose-counters': 'var(--ink-3)',
+            '--tw-prose-hr': 'var(--line)',
+            '--tw-prose-quotes': 'var(--ink-2)',
+            '--tw-prose-quote-borders': 'var(--line)',
+            '--tw-prose-code': 'var(--ink)',
+            '--tw-prose-pre-bg': 'var(--surface-2)',
+            '--tw-prose-pre-code': 'var(--ink)',
+            '--tw-prose-th-borders': 'var(--line-2)',
+            '--tw-prose-td-borders': 'var(--line)',
+            maxWidth: 'none',
+          },
+        },
+      },
       colors: {
         house: '#2D5BFF',
         brand: {
@@ -29,5 +52,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [typography],
 }
