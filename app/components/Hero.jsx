@@ -121,7 +121,7 @@ export default function Hero() {
           variants={shouldReduce ? undefined : rise}
           className="mx-auto mt-8 max-w-[52ch] font-body text-base leading-relaxed text-white/80 sm:text-lg"
         >
-          The Multimedia Application, Big Data &amp; Cyber Security laboratory at Telkom University 
+          The Multimedia Application, Big Data &amp; Cyber Security laboratory at Telkom University —
           a student research group turning coursework into security tools, data platforms, maps,
           and games.
         </motion.p>
