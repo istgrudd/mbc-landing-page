@@ -3,7 +3,7 @@
 // Absolute URLs use the production domain.
 const BASE = "https://mbclaboratory.com";
 
-export function pageMeta({ title, description, path = "/", image = "/logo.png" }) {
+export function pageMeta({ title, description, path = "/", image = "/mbc-app-icon.svg" }) { 
   const url = BASE + path;
   const img = image.startsWith("http") ? image : BASE + image;
   return [
