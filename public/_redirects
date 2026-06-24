@@ -1,0 +1,14 @@
+# Cloudflare Pages routing for this static (ssr:false + prerender) build.
+#
+# Not-found handling is intentionally NOT a catch-all here. Every real route is
+# prerendered to its own HTML, so deep links and refresh resolve directly to that
+# HTML (assets win). Unmatched paths are handled by the native 404.html mechanism
+# (build/client/404.html, generated post-build from React Router's route-less
+# __spa-fallback shell) — it renders the branded "Page not found" ErrorBoundary
+# with a correct 404 status.
+#
+# A "/*  /__spa-fallback  200" catch-all is deliberately avoided: in a served build
+# it shadows the prerendered HTML and static assets (breaking deep-link hydration),
+# and it would downgrade genuine 404s to 200. ("404" is also not a valid _redirects
+# status code.) Add real one-off redirects below as the site grows, e.g.:
+#   /old-path  /projects/new-slug  301

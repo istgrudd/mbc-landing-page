@@ -65,12 +65,22 @@ export default function Carousel({ images = [], alt = "" }) {
         <ChevronRight size={18} />
       </button>
 
-      <div className="absolute inset-x-0 bottom-3 flex justify-center gap-2">
+      <div className="absolute inset-x-0 bottom-0 flex justify-center">
         {images.map((_, n) => (
           <button
-            key={n} type="button" aria-label={`Go to image ${n + 1}`} onClick={() => setI(n)}
-            className={`h-2 w-2 rounded-full transition ${n === i ? "bg-white" : "bg-white/45 hover:bg-white/70"}`}
-          />
+            key={n}
+            type="button"
+            aria-label={`Go to image ${n + 1}`}
+            aria-current={n === i}
+            onClick={() => setI(n)}
+            className="group grid h-11 w-9 place-items-center"
+          >
+            <span
+              className={`h-2 w-2 rounded-full transition ${
+                n === i ? "bg-white" : "bg-white/45 group-hover:bg-white/70"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>

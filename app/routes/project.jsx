@@ -1,20 +1,31 @@
 import { useLoaderData, Link } from "react-router";
 import { getBySlug } from "../lib/content";
+import { pageMeta } from "../lib/seo";
 import Markdown from "../components/Markdown";
 import Carousel from "../components/Carousel";
 
-export async function loader({ params }) {
+function load({ params }) {
   const item = getBySlug("projects", params.slug);
   if (!item) throw new Response("Not Found", { status: 404 });
   return { item };
 }
 
-export function meta({ data }) {
+// `loader` runs at build time → prerendered HTML + embedded data for real slugs.
+// `clientLoader` runs in the browser, so SPA navigation and unknown slugs (served
+// via the 404 shell) resolve from the bundled content instead of fetching a missing
+// `.data` file — letting the branded "Page not found" ErrorBoundary render.
+export const loader = load;
+export const clientLoader = load;
+
+export function meta({ data, location }) {
   if (!data?.item) return [{ title: "Not found · MBC Lab" }];
-  return [
-    { title: `${data.item.title} · MBC Lab` },
-    { name: "description", content: data.item.summary ?? "" },
-  ];
+  const { item } = data;
+  return pageMeta({
+    title: `${item.title} · MBC Lab`,
+    description: item.summary ?? `${item.division} project by MBC Lab.`,
+    path: location.pathname,
+    image: item.images?.[0] ?? "/logo.png",
+  });
 }
 
 export default function ProjectDetail() {

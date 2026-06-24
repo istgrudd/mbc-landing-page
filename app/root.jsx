@@ -13,6 +13,7 @@ import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import FloatingThemeToggle from "./components/FloatingThemeToggle";
 import { useTheme } from "./hooks/useTheme";
+import { pageMeta } from "./lib/seo";
 
 export const links = () => [
   { rel: "icon", type: "image/png", href: "/logo.png" },
@@ -24,14 +25,13 @@ export const links = () => [
   },
 ];
 
-export const meta = () => [
-  { title: "MBC Lab — Multimedia, Big Data & Cyber Security · Telkom University" },
-  {
-    name: "description",
-    content:
+export const meta = () =>
+  pageMeta({
+    title: "MBC Lab — Multimedia, Big Data & Cyber Security · Telkom University",
+    description:
       "MBC Lab is a student research laboratory at Telkom University, Bandung — five divisions, fifty-one assistants, turning coursework into real systems.",
-  },
-];
+    path: "/",
+  });
 
 // Prevents a flash of the wrong theme before React hydrates.
 const themeScript = `try{if(localStorage.getItem('mbc-theme')==='dark'){document.documentElement.classList.add('dark')}}catch(e){}`;

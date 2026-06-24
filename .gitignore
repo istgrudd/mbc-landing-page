@@ -12,6 +12,8 @@ dist
 dist-ssr
 build
 .react-router
+.wrangler
+.playwright-mcp
 *.local
 
 # Editor directories and files

@@ -1,11 +1,13 @@
 import { useLoaderData, Link } from "react-router";
 import { getAll } from "../lib/content";
+import { pageMeta } from "../lib/seo";
 
 export function meta() {
-  return [
-    { title: "Projects · MBC Lab" },
-    { name: "description", content: "Projects built across MBC Lab's divisions." },
-  ];
+  return pageMeta({
+    title: "Projects · MBC Lab",
+    description: "Projects built across MBC Lab's divisions.",
+    path: "/projects",
+  });
 }
 
 export async function loader() {
