@@ -30,6 +30,7 @@ export default function Events() {
 
   const when = formatDate(recruit.date) || 'To be announced'
   const where = recruit.location || 'Telkom University, Bandung'
+  const portal = recruit.links?.portal
 
   return (
     <section id="recruit" className="px-6 py-24 lg:px-10">
@@ -55,7 +56,7 @@ export default function Events() {
           <div className="flex-1 p-8 sm:p-12 lg:p-14">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/80">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-red" />
-              {recruit.tag ?? 'Recruitment'} · Applications open soon
+              {recruit.tag ?? 'Recruitment'} · Applications open
             </span>
 
             <h2
@@ -73,10 +74,11 @@ export default function Events() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href={`mailto:${CONTACT_EMAIL}?subject=MBC%20Lab%20Recruitment%202026/2027`}
+                href={portal ?? `mailto:${CONTACT_EMAIL}?subject=MBC%20Lab%20Recruitment%202026/2027`}
+                {...(portal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-[#0B0E16] transition-transform duration-200 hover:scale-[1.03]"
               >
-                Ask about recruitment
+                {portal ? 'Apply now' : 'Ask about recruitment'}
                 <ArrowUpRight
                   size={15}
                   className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

@@ -77,7 +77,8 @@ card or the build can break. `order` must be **unique within each collection**.
 | `status` | ✅ | `upcoming` or `past`. |
 | `summary` | ✅ | One line shown on the card. |
 | `order` | ✅ | Lower = first. **Unique** among events. |
-| `images` | — | Up to 3 (poster/photos) — see §4. |
+| `images` | — | Up to 3 (poster/photos) — see §4. Image #1 also shows full-size on the event page. |
+| `links` | — | `{ portal: "" }` — a registration/recruitment URL; shows an **Apply** button on the event page and the landing recruitment ticket. |
 
 ---
 
@@ -176,6 +177,7 @@ status: "upcoming"
 summary: "One-line description for the card."
 images: []
 order: 99
+links: { portal: "" }
 ---
 Event details, agenda, requirements, and how to register.
 ```
