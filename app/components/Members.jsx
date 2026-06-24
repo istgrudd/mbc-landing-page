@@ -75,19 +75,19 @@ const REST = declusterByDivision(
 )
 const ORDERED = [...HEADS, ...REST]
 
-function MemberCard({ member, index }) {
+function MemberCard({ member, index, isMarquee }) {
   const shouldReduce = useReducedMotion()
   const color = COLOR_BY_DIV[member.divisionId]
 
   return (
     <motion.figure
-      layout
-      initial={shouldReduce ? false : { opacity: 0, scale: 0.94 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={shouldReduce ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+      layout={!isMarquee}
+      initial={shouldReduce || isMarquee ? false : { opacity: 0, scale: 0.94 }}
+      animate={isMarquee ? {} : { opacity: 1, scale: 1 }}
+      exit={shouldReduce || isMarquee ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: (index % 6) * 0.04 }}
       whileHover={shouldReduce ? {} : { y: -6 }}
-      className="group relative aspect-[4/5] overflow-hidden rounded-xl border border-[var(--line)]"
+      className={`group relative aspect-[4/5] overflow-hidden rounded-xl border border-[var(--line)] ${isMarquee ? 'w-full h-full block' : ''}`}
     >
       <MemberPhoto member={member} className="h-full w-full" />
 
@@ -112,8 +112,14 @@ function MemberCard({ member, index }) {
 export default function Members() {
   const shouldReduce = useReducedMotion()
   const [filter, setFilter] = useState('all')
+  const [showAllEveryone, setShowAllEveryone] = useState(false)
 
   const shown = filter === 'all' ? ORDERED : ORDERED.filter((m) => m.divisionId === filter)
+  const isMarqueeMode = filter === 'all' && !showAllEveryone
+
+  const marqueeHalf = Math.ceil(ORDERED.length / 2)
+  const row1 = isMarqueeMode ? ORDERED.slice(0, marqueeHalf) : []
+  const row2 = isMarqueeMode ? ORDERED.slice(marqueeHalf) : []
 
   return (
     <section id="members" className="relative overflow-hidden bg-[var(--surface)] px-6 py-24 lg:px-10">
@@ -152,7 +158,10 @@ export default function Members() {
             return (
               <button
                 key={f.id}
-                onClick={() => setFilter(f.id)}
+                onClick={() => {
+                  setFilter(f.id)
+                  setShowAllEveryone(false)
+                }}
                 className="rounded-full border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-200"
                 style={{
                   borderColor: isActive ? f.color : 'var(--line-2)',
@@ -167,16 +176,46 @@ export default function Members() {
         </div>
 
         {/* photo wall */}
-        <motion.div
-          layout
-          className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-5 xl:grid-cols-6"
-        >
-          <AnimatePresence mode="popLayout">
-            {shown.map((m, i) => (
-              <MemberCard key={m.id} member={m} index={i} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {isMarqueeMode ? (
+          <div className="mt-8 flex flex-col items-center">
+            <div className="relative w-full overflow-hidden py-4 flex flex-col gap-4">
+              <div className="flex w-max marquee-track gap-3 sm:gap-4" style={{ '--marquee-dur': '100s' }}>
+                {[...row1, ...row1].map((m, i) => (
+                  <div key={`${m.id}-${i}`} className="w-40 shrink-0 sm:w-48 lg:w-56">
+                    <MemberCard member={m} index={i} isMarquee />
+                  </div>
+                ))}
+              </div>
+              <div className="flex w-max marquee-track gap-3 sm:gap-4" style={{ '--marquee-dur': '100s', animationDirection: 'reverse' }}>
+                {[...row2, ...row2].map((m, i) => (
+                  <div key={`${m.id}-${i}`} className="w-40 shrink-0 sm:w-48 lg:w-56">
+                    <MemberCard member={m} index={i} isMarquee />
+                  </div>
+                ))}
+              </div>
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-[var(--surface)] to-transparent sm:w-24" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[var(--surface)] to-transparent sm:w-24" />
+            </div>
+
+            <button
+              onClick={() => setShowAllEveryone(true)}
+              className="mt-8 rounded-full border border-[var(--line-2)] px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-[var(--ink-2)] transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)] sm:px-8 sm:py-3 sm:text-sm"
+            >
+              Show All
+            </button>
+          </div>
+        ) : (
+          <motion.div
+            layout
+            className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-5 xl:grid-cols-6"
+          >
+            <AnimatePresence mode="popLayout">
+              {shown.map((m, i) => (
+                <MemberCard key={m.id} member={m} index={i} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
       </div>
     </section>
   )
