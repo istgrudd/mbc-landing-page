@@ -1,8 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
-import { members } from '../data/members'
-import MemberPhoto from './MemberPhoto'
 
 const STATS = [
   ['53', 'assistants'],
@@ -11,29 +9,26 @@ const STATS = [
   ['3', 'papers'],
 ]
 
-// Real group photo; the member-portrait mosaic stays as a fallback.
+// Real group photo; until it loads, the dark section background shows.
 const GROUP_PHOTO = '/photos/all-member-1.jpeg'
-const tiles = [...members, ...members]
-
-function MemberMosaic() {
-  return (
-    <div aria-hidden="true" className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6">
-      {tiles.map((m, i) => (
-        <div key={`${m.id}-${i}`} className="relative aspect-[3/4]">
-          <MemberPhoto member={m} bare className="h-full w-full" />
-        </div>
-      ))}
-    </div>
-  )
-}
 
 function HeroBackground() {
   const shouldReduce = useReducedMotion()
+  const imgRef = useRef(null)
   const [loaded, setLoaded] = useState(false)
+
+  // The photo often finishes loading before React attaches onLoad (cached, or
+  // already complete after SSR hydration) — check completeness on mount so the
+  // image isn't left stuck invisible behind the fallback mosaic.
+  useEffect(() => {
+    const el = imgRef.current
+    if (el && el.complete && el.naturalWidth > 0) setLoaded(true)
+  }, [])
+
   return (
-    <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-      <MemberMosaic />
+    <div aria-hidden="true" className="absolute inset-0 overflow-hidden bg-[#080A0F]">
       <motion.img
+        ref={imgRef}
         src={GROUP_PHOTO}
         alt=""
         onLoad={() => setLoaded(true)}
@@ -144,21 +139,24 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* ── stat strip, anchored bottom ───────────────────── */}
-      <motion.dl
-        initial={shouldReduce ? false : { opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute bottom-14 left-1/2 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-6 gap-y-2 rounded-2xl border border-white/15 bg-black/30 px-6 py-3 backdrop-blur-md"
-      >
-        {STATS.map(([v, l], i) => (
-          <div key={l} className="flex items-center gap-2">
-            {i > 0 && <span className="mr-5 hidden h-1 w-1 rounded-full bg-brand-red sm:block" />}
-            <span className="font-mono text-lg font-medium tnum text-white">{v}</span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">{l}</span>
-          </div>
-        ))}
-      </motion.dl>
+      {/* ── stat strip, anchored bottom. Centered via a flex wrapper: Framer's
+           y-transform on the dl would otherwise cancel a -translate-x-1/2. ── */}
+      <div className="absolute inset-x-0 bottom-14 z-10 flex justify-center px-6">
+        <motion.dl
+          initial={shouldReduce ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="flex max-w-full flex-wrap items-center justify-center gap-x-6 gap-y-2 rounded-2xl border border-white/15 bg-black/30 px-6 py-3 backdrop-blur-md"
+        >
+          {STATS.map(([v, l], i) => (
+            <div key={l} className="flex items-center gap-2">
+              {i > 0 && <span className="mr-5 hidden h-1 w-1 rounded-full bg-brand-red sm:block" />}
+              <span className="font-mono text-lg font-medium tnum text-white">{v}</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">{l}</span>
+            </div>
+          ))}
+        </motion.dl>
+      </div>
 
       {/* scroll cue */}
       <motion.a

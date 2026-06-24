@@ -9,6 +9,72 @@ const NAME_BY_DIV = Object.fromEntries(divisions.map((d) => [d.id, d.short]))
 
 const FILTERS = [{ id: 'all', name: 'Everyone', color: 'var(--ink)' }, ...divisions]
 
+// ── Roster ordering ─────────────────────────────────────────────────────────
+// Leadership fills the opening row(s); everyone else is shuffled. Both passes are
+// de-clustered so adjacent cards never share a division (no two same colours next
+// to each other). Computed once at module scope with a fixed seed so SSR and the
+// client produce the exact same order (no hydration mismatch).
+const LEAD_ROLES = [
+  'Koordinator Asisten',
+  'Wakil Koordinator Asisten',
+  'Kepala Cyber Security',
+  'Kepala Big Data',
+  'Kepala GIS',
+  'Kepala Game Tech',
+  'Practicum Coordinator',
+]
+const leadRank = (m) => LEAD_ROLES.indexOf(m.role)
+
+function seededShuffle(list, seed) {
+  const a = [...list]
+  let s = seed >>> 0
+  const rnd = () => {
+    s = (s * 1664525 + 1013904223) >>> 0
+    return s / 4294967296
+  }
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+// Greedy reorder: always take the most-common remaining division that differs
+// from the previous card, so same-colour cards don't end up side by side.
+function declusterByDivision(list, startPrev = null) {
+  const pool = [...list]
+  const out = []
+  let prev = startPrev
+  while (pool.length) {
+    const counts = {}
+    for (const m of pool) counts[m.divisionId] = (counts[m.divisionId] || 0) + 1
+    let pickDiv = null
+    let best = -1
+    for (const d in counts) {
+      if (d === prev) continue
+      if (counts[d] > best) {
+        best = counts[d]
+        pickDiv = d
+      }
+    }
+    if (pickDiv === null) pickDiv = prev // only one division remains
+    const idx = pool.findIndex((m) => m.divisionId === pickDiv)
+    out.push(pool[idx])
+    pool.splice(idx, 1)
+    prev = pickDiv
+  }
+  return out
+}
+
+const HEADS = declusterByDivision(
+  members.filter((m) => leadRank(m) >= 0).sort((a, b) => leadRank(a) - leadRank(b)),
+)
+const REST = declusterByDivision(
+  seededShuffle(members.filter((m) => leadRank(m) < 0), 73),
+  HEADS.length ? HEADS[HEADS.length - 1].divisionId : null,
+)
+const ORDERED = [...HEADS, ...REST]
+
 function MemberCard({ member, index }) {
   const shouldReduce = useReducedMotion()
   const color = COLOR_BY_DIV[member.divisionId]
@@ -25,15 +91,17 @@ function MemberCard({ member, index }) {
     >
       <MemberPhoto member={member} className="h-full w-full" />
 
-      <figcaption className="absolute inset-x-0 bottom-0 z-10 p-4">
+      <figcaption className="absolute inset-x-0 bottom-0 z-10 p-2.5 sm:p-4">
         <span
-          className="mb-2 inline-block rounded-full px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white"
+          className="mb-1 inline-block rounded-full px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-white sm:mb-2 sm:px-2 sm:text-[9px] sm:tracking-[0.18em]"
           style={{ backgroundColor: color }}
         >
           {NAME_BY_DIV[member.divisionId]}
         </span>
-        <p className="font-display text-[15px] font-bold leading-tight text-white">{member.name}</p>
-        <p className="font-mono text-[10px] tracking-[0.12em] text-white/75">
+        <p className="line-clamp-2 font-display text-[12px] font-bold leading-tight text-white sm:text-[15px]">
+          {member.name}
+        </p>
+        <p className="mt-0.5 hidden font-mono text-[10px] tracking-[0.12em] text-white/75 sm:block">
           {member.role} · &rsquo;{String(member.year).slice(2)}
         </p>
       </figcaption>
@@ -45,7 +113,7 @@ export default function Members() {
   const shouldReduce = useReducedMotion()
   const [filter, setFilter] = useState('all')
 
-  const shown = filter === 'all' ? members : members.filter((m) => m.divisionId === filter)
+  const shown = filter === 'all' ? ORDERED : ORDERED.filter((m) => m.divisionId === filter)
 
   return (
     <section id="members" className="relative overflow-hidden bg-[var(--surface)] px-6 py-24 lg:px-10">
@@ -58,18 +126,18 @@ export default function Members() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
-          <div className="max-w-xl">
+          <div>
             <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--ink-3)]">
               The roster · {new Date().getFullYear()}
             </p>
             <h2
-              className="font-display font-extrabold leading-[0.95] tracking-tight text-[var(--ink)]"
+              className="font-display font-extrabold leading-[0.95] tracking-tight text-[var(--ink)] md:whitespace-nowrap"
               style={{ fontSize: 'clamp(2.25rem, 4.2vw, 3.75rem)' }}
             >
               The people are the lab.
             </h2>
           </div>
-          <p className="font-mono text-sm text-[var(--ink-2)]">
+          <p className="shrink-0 font-mono text-sm text-[var(--ink-2)]">
             <span className="text-3xl font-medium tnum text-[var(--ink)]">{members.length}</span>
             <span className="ml-2 align-middle text-[10px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
               assistants on duty
@@ -101,7 +169,7 @@ export default function Members() {
         {/* photo wall */}
         <motion.div
           layout
-          className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
+          className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-5 xl:grid-cols-6"
         >
           <AnimatePresence mode="popLayout">
             {shown.map((m, i) => (
