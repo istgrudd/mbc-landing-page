@@ -109,11 +109,6 @@ export default function Members() {
             ))}
           </AnimatePresence>
         </motion.div>
-
-        <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
-          Live 2026/2027 roster · names &amp; lab codes are real — portraits drop into{' '}
-          <span className="text-[var(--ink-2)]">public/members/</span>
-        </p>
       </div>
     </section>
   )
