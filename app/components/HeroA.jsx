@@ -65,7 +65,7 @@ export default function HeroA() {
 
           {/* Sub-desc */}
           <motion.div variants={shouldReduce ? {} : item} className="space-y-0.5">
-            <p className="font-mono text-sm text-[#4A6580]">Multimedia · Big Data · Cyber Security</p>
+            <p className="font-mono text-sm text-[#4A6580]">Multimedia Application · Big Data · Cyber Security</p>
             <p className="font-mono text-sm text-[#4A6580]">Faculty of Informatics — Telkom University, Bandung</p>
           </motion.div>
 

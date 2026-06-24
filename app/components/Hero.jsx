@@ -102,7 +102,7 @@ export default function Hero() {
         <motion.div variants={shouldReduce ? undefined : rise} className="mb-7 flex items-center justify-center gap-3">
           <span className="h-px w-8 brand-gradient" />
           <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/75">
-            Multimedia · Big Data · Cyber Security
+            Multimedia Application · Big Data · Cyber Security
           </span>
           <span className="h-px w-8 brand-gradient" />
         </motion.div>
@@ -121,8 +121,8 @@ export default function Hero() {
           variants={shouldReduce ? undefined : rise}
           className="mx-auto mt-8 max-w-[52ch] font-body text-base leading-relaxed text-white/80 sm:text-lg"
         >
-          The Multimedia, Big Data &amp; Cyber Security laboratory at Telkom University — a
-          student research group turning coursework into security tools, data platforms, maps,
+          The Multimedia Application, Big Data &amp; Cyber Security laboratory at Telkom University 
+          a student research group turning coursework into security tools, data platforms, maps,
           and games.
         </motion.p>
 

@@ -27,9 +27,9 @@ export const links = () => [
 
 export const meta = () =>
   pageMeta({
-    title: "MBC Lab — Multimedia, Big Data & Cyber Security · Telkom University",
+    title: "Multimedia Application, Big Data & Cyber Security · Telkom University",
     description:
-      "MBC Lab is a student research laboratory at Telkom University, Bandung — five divisions, fifty-one assistants, turning coursework into real systems.",
+      "MBC Lab is a student research laboratory at Telkom University, Bandung — five divisions, fifty-three assistants, turning coursework into real systems.",
     path: "/",
   });
 

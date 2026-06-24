@@ -70,7 +70,7 @@ export default function HeroB() {
             className="font-heading font-extrabold leading-[0.91] tracking-tight text-[var(--text-primary)] mb-9"
             style={{ fontSize: 'clamp(3.75rem, 9vw, 8rem)' }}
           >
-            Multimedia,<br />
+            Multimedia Application,<br />
             Big Data &amp;<br />
             <span className="text-brand-blue">Cyber Security.</span>
           </motion.h1>
