@@ -16,7 +16,7 @@ import { useTheme } from "./hooks/useTheme";
 import { pageMeta } from "./lib/seo";
 
 export const links = () => [
-  { rel: "icon", type: "image/png", href: "/logo.png" },
+  { rel: "icon", type: "image/svg+xml", href: "/mbc-app-icon.svg" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
   {
