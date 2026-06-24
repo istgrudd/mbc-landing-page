@@ -1,11 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
-
-const STATS = [
-  { value: '51',  label: 'Assistants' },
-  { value: '8',   label: 'HKI Works'  },
-  { value: '3',   label: 'Papers'     },
-  { value: '5',   label: 'Divisions'  },
-]
+import { getAll } from '../lib/content'
+import { members } from '../data/members'
+import { divisions } from '../data/divisions'
 
 const item = {
   hidden: { opacity: 0, y: 18 },
@@ -14,6 +10,20 @@ const item = {
 
 export default function HeroB() {
   const shouldReduce = useReducedMotion()
+
+  const hkiCount = getAll('projects').length
+  const paperCount = getAll('research').length
+  const awardsCount = getAll('awards').length
+  const assistantsCount = members.length
+  const divisionsCount = divisions.length
+
+  const STATS = [
+    { value: String(assistantsCount),  label: 'Assistants' },
+    { value: String(hkiCount),         label: 'HKI Works'  },
+    { value: String(paperCount),       label: 'Papers'     },
+    { value: String(awardsCount),      label: 'Awards'     },
+    { value: String(divisionsCount),   label: 'Divisions'  },
+  ]
 
   return (
     <div className="relative min-h-screen flex flex-col overflow-hidden bg-[var(--bg-base)]">
@@ -76,7 +86,7 @@ export default function HeroB() {
 
       {/* Stat strip — anchored to hero bottom */}
       <motion.div
-        className="relative z-10 border-t border-[var(--border)] grid grid-cols-2 sm:grid-cols-4"
+        className="relative z-10 border-t border-[var(--border)] grid grid-cols-2 sm:grid-cols-5"
         initial={shouldReduce ? {} : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}

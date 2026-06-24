@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { divisions } from '../data/divisions'
+import { getAll } from '../lib/content'
 
 const TOTAL_MEMBERS = divisions.reduce((sum, d) => sum + d.members, 0)
 const MAX_MEMBERS = Math.max(...divisions.map((d) => d.members))
@@ -32,6 +33,10 @@ function RosterRow({ division, index }) {
 
 export default function About() {
   const shouldReduce = useReducedMotion()
+
+  const hkiCount = getAll('projects').length
+  const paperCount = getAll('research').length
+  const awardsCount = getAll('awards').length
 
   return (
     <section id="about" className="relative overflow-hidden bg-[var(--paper)] px-6 py-24 lg:px-10">
@@ -67,9 +72,9 @@ export default function About() {
 
           <div className="mt-9 flex flex-wrap gap-x-10 gap-y-4">
             {[
-              ['8', 'HKI works'],
-              ['3', 'published papers'],
-              ['3', 'partnerships'],
+              [String(hkiCount), 'HKI works'],
+              [String(paperCount), 'published papers'],
+              [String(awardsCount), 'awards'],
             ].map(([v, l]) => (
               <div key={l} className="flex items-baseline gap-2">
                 <span className="font-display text-2xl font-bold tnum text-[var(--ink)]">{v}</span>

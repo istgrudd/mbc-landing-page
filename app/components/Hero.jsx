@@ -1,13 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
-
-const STATS = [
-  ['53', 'assistants'],
-  ['5', 'divisions'],
-  ['8', 'HKI works'],
-  ['3', 'papers'],
-]
+import { getAll } from '../lib/content'
+import { members } from '../data/members'
+import { divisions } from '../data/divisions'
 
 // Real group photo; until it loads, the dark section background shows.
 const GROUP_PHOTO = '/photos/all-member-1.jpeg'
@@ -54,6 +50,20 @@ const rise = {
 
 export default function Hero() {
   const shouldReduce = useReducedMotion()
+
+  const hkiCount = getAll('projects').length
+  const paperCount = getAll('research').length
+  const awardsCount = getAll('awards').length
+  const assistantsCount = members.length
+  const divisionsCount = divisions.length
+
+  const STATS = [
+    [String(assistantsCount), 'assistants'],
+    [String(divisionsCount), 'divisions'],
+    [String(hkiCount), 'HKI works'],
+    [String(paperCount), 'papers'],
+    [String(awardsCount), 'awards'],
+  ]
 
   return (
     <section
