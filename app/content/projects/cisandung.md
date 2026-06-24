@@ -1,13 +1,12 @@
 ---
 title: "Cisandung"
-summary: "Original HKI-certified game built by the Game Tech division."
+summary: "Intellectual Property Registration / Project."
 division: "Game Tech"
-tags: ["Game Dev", "Unity", "HKI"]
-year: "2025"
+year: "2024"
+order: 14
 images: []
-featured: false
-order: 2
+featured: true
 status: "completed"
-links: { github: "", demo: "", hki: "" }
+links: {}
 ---
-HKI-certified game project built by Game Tech division members, showcasing original game design and development.
+Cisandung was developed by MUHAMMAD DZAKHWAN, AZIZAN, REINBRANDT MALIKIYANOCAHYONO, ULINNUHA UBAY SAMBODO.

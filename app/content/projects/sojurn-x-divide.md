@@ -1,13 +1,12 @@
 ---
 title: "Sojurn X Divide"
-summary: "Collaborative, HKI-registered Game Tech title."
+summary: "Intellectual Property Registration / Project."
 division: "Game Tech"
-tags: ["Game Dev", "HKI"]
-year: "2025"
+year: "2024"
+order: 15
 images: []
-featured: false
-order: 3
+featured: true
 status: "completed"
-links: { github: "", demo: "", hki: "" }
+links: {}
 ---
-Collaborative Game Tech project registered under intellectual property rights, developed across multiple team members.
+Sojurn X Divide was developed by NESTLY REINA SO'AN, ADAM FIRZA FIRDAUS, MUHAMMAD AKRAM AL, HAAZIM.

@@ -1,13 +1,12 @@
 ---
 title: "Hiring The Rookie"
-summary: "Recruitment-simulation game, HKI-certified, by the Game Tech division."
+summary: "Intellectual Property Registration / Project."
 division: "Game Tech"
-tags: ["Unity", "C#", "Game Dev"]
-year: "2025"
+year: "2024"
+order: 17
 images: []
-featured: false
-order: 1
+featured: true
 status: "completed"
-links: { github: "", demo: "", hki: "" }
+links: {}
 ---
-Game developed by the Game Tech division with intellectual property (HKI) certification. Features gameplay centered on recruitment simulation.
+Hiring The Rookie was developed by RIZKI ANANDA, FAYYADH ASADY, MUHAMMAD RAIHAN RIPAIE, SHEDY INDRA MAULANA, MUSLIHANA ABDILLAH, FATHIH AKBAR FARABHI, SALNA SIRAZ MAULIDIA, YOANES BOSKO GALIH SURIPRAMESTHI, IVAN SAPUTRA, HAMMAM AMANULLAH.

@@ -5,6 +5,7 @@ const MODULES = {
   projects: import.meta.glob("../content/projects/*.md", { eager: true, query: "?raw", import: "default" }),
   research: import.meta.glob("../content/research/*.md", { eager: true, query: "?raw", import: "default" }),
   events:   import.meta.glob("../content/events/*.md",   { eager: true, query: "?raw", import: "default" }),
+  awards:   import.meta.glob("../content/awards/*.md",   { eager: true, query: "?raw", import: "default" }),
 };
 
 function parseGroup(modules) {
@@ -21,6 +22,7 @@ const CONTENT = {
   projects: parseGroup(MODULES.projects),
   research: parseGroup(MODULES.research),
   events: parseGroup(MODULES.events),
+  awards: parseGroup(MODULES.awards),
 };
 
 export function getAll(group) {

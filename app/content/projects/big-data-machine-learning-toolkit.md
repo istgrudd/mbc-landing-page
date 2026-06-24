@@ -1,13 +1,12 @@
 ---
 title: "Big Data Machine Learning Toolkit"
-summary: "Reusable, HKI-certified ML toolkit for large-scale data."
+summary: "Intellectual Property Registration / Project."
 division: "Big Data"
-tags: ["Python", "Machine Learning", "Big Data", "HKI"]
-year: "2025"
+year: "2024"
+order: 13
 images: []
-featured: false
-order: 5
+featured: true
 status: "completed"
-links: { github: "", demo: "", hki: "" }
+links: {}
 ---
-A reusable ML toolkit for large-scale data processing developed and certified under intellectual property by the Big Data division.
+Big Data Machine Learning Toolkit was developed by RAFI ANDHIKA PUTRA PRATAMA, VERINDRA HERNANDA PUTRA, MUHAMMAD KAROV ARDAVA BARUS, MARCELIA CHINTYA HARTAKAADI.

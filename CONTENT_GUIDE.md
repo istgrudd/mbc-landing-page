@@ -16,6 +16,7 @@ You only need a text editor and (optionally) some images.
 | A project | `app/content/projects/` | `/projects` and `/projects/<slug>` |
 | A research paper | `app/content/research/` | `/research` and `/research/<slug>` |
 | An event | `app/content/events/` | `/events` and `/events/<slug>` |
+| An award | `app/content/awards/` | Landing page Awards section |
 
 **The file name is the URL.** `app/content/projects/cycle-chess.md` becomes
 `https://mbclaboratory.com/projects/cycle-chess`.
@@ -79,6 +80,16 @@ card or the build can break. `order` must be **unique within each collection**.
 | `order` | ✅ | Lower = first. **Unique** among events. |
 | `images` | — | Up to 3 (poster/photos) — see §4. Image #1 also shows full-size on the event page. |
 | `links` | — | `{ portal: "" }` — a registration/recruitment URL; shows an **Apply** button on the event page and the landing recruitment ticket. |
+
+### Awards (`app/content/awards/*.md`)
+
+| Field | Required | Notes |
+|---|---|---|
+| `title` | ✅ | Competition/Award name. |
+| `award` | ✅ | The placement or award (e.g. "1st Winner", "Finalist"). |
+| `members` | ✅ | Line-break separated list of members. |
+| `year` | ✅ | e.g. `"2025"`. |
+| `order` | ✅ | Lower = first. **Unique** among awards. |
 
 ---
 

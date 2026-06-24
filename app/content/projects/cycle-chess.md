@@ -1,13 +1,12 @@
 ---
 title: "Cycle Chess"
-summary: "HKI-certified chess variant with original mechanics."
+summary: "Intellectual Property Registration / Project."
 division: "Game Tech"
-tags: ["Game Dev", "Unity", "HKI"]
-year: "2025"
+year: "2024"
+order: 16
 images: []
-featured: false
-order: 4
+featured: true
 status: "completed"
-links: { github: "", demo: "", hki: "" }
+links: {}
 ---
-A chess variant game with original mechanics, developed and HKI-certified by the Game Tech division.
+Cycle Chess was developed by GALUH INTAN KHUMAIRA, MUHAMMAD RILVANDIO, FEBRIAN.

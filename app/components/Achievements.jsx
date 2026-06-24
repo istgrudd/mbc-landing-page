@@ -1,19 +1,22 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router'
-import { Code2, BookOpen, Handshake } from 'lucide-react'
+import { Code2, BookOpen, Handshake, Trophy } from 'lucide-react'
 import { getAll } from '../lib/content'
 import { achievements } from '../data/achievements'
+import { useState } from 'react'
 
 const COLUMNS = [
   { id: 'projects', label: 'Projects', icon: Code2, accent: '#2D5BFF' },
   { id: 'research', label: 'Research', icon: BookOpen, accent: '#8B5CF6' },
+  { id: 'awards', label: 'Awards', icon: Trophy, accent: '#F5A524' },
   { id: 'partnerships', label: 'Partnerships', icon: Handshake, accent: '#13A36B' },
 ]
 
-// Projects & Research are markdown-driven; Partnerships stays on achievements.js.
+// Projects, Research, and Awards are markdown-driven; Partnerships stays on achievements.js.
 const COLUMN_DATA = {
   projects: getAll('projects'),
   research: getAll('research'),
+  awards: getAll('awards'),
   partnerships: achievements.partnerships,
 }
 
@@ -85,10 +88,28 @@ function PartnershipEntry({ item, index, accent }) {
   )
 }
 
-const ENTRY_MAP = { projects: ProjectEntry, research: ResearchEntry, partnerships: PartnershipEntry }
+function AwardEntry({ item, index, accent }) {
+  return (
+    <Entry index={index}>
+      <div className="mb-1 flex items-start justify-between gap-2">
+        <h3 className="font-display text-sm font-bold leading-snug text-[var(--ink)]">{item.title}</h3>
+        <span className="shrink-0 font-mono text-[10px] tnum text-[var(--ink-3)]">{item.year}</span>
+      </div>
+      <p className="mb-1.5 font-mono text-[11px] font-medium" style={{ color: accent }}>{item.award}</p>
+      <p className="font-body text-xs leading-relaxed text-[var(--ink-2)] whitespace-pre-line">{item.members}</p>
+    </Entry>
+  )
+}
+
+const ENTRY_MAP = { projects: ProjectEntry, research: ResearchEntry, awards: AwardEntry, partnerships: PartnershipEntry }
 
 export default function Achievements() {
   const shouldReduce = useReducedMotion()
+  const [expandedCols, setExpandedCols] = useState({})
+
+  const toggleCol = (id) => {
+    setExpandedCols((prev) => ({ ...prev, [id]: !prev[id] }))
+  }
 
   return (
     <section id="work" className="relative overflow-hidden bg-[var(--paper)] px-6 py-24 lg:px-10">
@@ -111,11 +132,14 @@ export default function Achievements() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
           {COLUMNS.map((col, ci) => {
             const Icon = col.icon
             const EntryComponent = ENTRY_MAP[col.id]
             const items = COLUMN_DATA[col.id]
+            const isExpanded = expandedCols[col.id]
+            const needsExpansion = items.length > 4
+
             return (
               <motion.div
                 key={col.id}
@@ -123,7 +147,7 @@ export default function Achievements() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: ci * 0.1 }}
-                className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)]"
+                className="flex flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)]"
               >
                 <div
                   className="flex items-center gap-2.5 border-b border-[var(--line)] px-5 py-4"
@@ -140,16 +164,35 @@ export default function Achievements() {
                     {items.length}
                   </span>
                 </div>
-                {items.map((item, i) => (
-                  <EntryComponent key={item.slug ?? item.id} item={item} index={i} accent={col.accent} />
-                ))}
-                {col.id !== 'partnerships' && (
-                  <Link
-                    to={`/${col.id}`}
-                    className="block border-t border-[var(--line)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:underline"
+                
+                <div className={`relative transition-all duration-500 ease-in-out ${!isExpanded && needsExpansion ? 'max-h-[380px] overflow-hidden' : ''}`}>
+                  {items.map((item, i) => (
+                    <EntryComponent key={item.slug ?? item.id} item={item} index={i} accent={col.accent} />
+                  ))}
+                  
+                  {!isExpanded && needsExpansion && (
+                    <div className="pointer-events-none absolute bottom-0 left-0 z-10 h-32 w-full bg-gradient-to-t from-[var(--surface)] to-transparent" />
+                  )}
+                </div>
+
+                {needsExpansion && (
+                  <button
+                    onClick={() => toggleCol(col.id)}
+                    className="block w-full border-t border-[var(--line)] px-5 py-3 text-left font-mono text-[10px] uppercase tracking-[0.2em] transition-colors hover:bg-[var(--line)] hover:opacity-80"
                     style={{ color: col.accent }}
                   >
-                    View all →
+                    {isExpanded ? 'Show Less ↑' : 'Show All ↓'}
+                  </button>
+                )}
+                
+                {/* Fallback to full page link if they don't need expansion but it's a page */}
+                {!needsExpansion && col.id !== 'partnerships' && col.id !== 'awards' && (
+                  <Link
+                    to={`/${col.id}`}
+                    className="block w-full border-t border-[var(--line)] px-5 py-3 text-left font-mono text-[10px] uppercase tracking-[0.2em] transition-colors hover:bg-[var(--line)] hover:opacity-80"
+                    style={{ color: col.accent }}
+                  >
+                    View Page →
                   </Link>
                 )}
               </motion.div>
