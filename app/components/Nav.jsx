@@ -84,10 +84,10 @@ export default function Nav() {
           {LINKS.map((l) => renderLink(l, linkClass(solid)))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <a
             href="/#recruit"
-            className="group inline-flex items-center gap-2 rounded-full bg-brand-blue px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white transition-transform duration-200 hover:scale-[1.04]"
+            className="group inline-flex items-center gap-1.5 rounded-full bg-brand-blue px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-white transition-transform duration-200 hover:scale-[1.04] sm:gap-2 sm:px-4 sm:py-2 sm:text-[11px] sm:tracking-[0.16em]"
           >
             Join the lab
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-red transition-transform duration-300 group-hover:scale-150" />
