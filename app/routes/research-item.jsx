@@ -33,7 +33,10 @@ export default function ResearchDetail() {
   return (
     <article className="mx-auto max-w-3xl px-6 pb-24 pt-28 lg:px-8">
       <Link to="/research" className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-blue hover:underline">← Research</Link>
-      <h1 className="mt-6 font-display text-3xl font-bold tracking-tight text-[var(--ink)] sm:text-4xl">{item.title}</h1>
+      {item.division && (
+        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">{item.division}</p>
+      )}
+      <h1 className={`${item.division ? "mt-2" : "mt-6"} font-display text-3xl font-bold tracking-tight text-[var(--ink)] sm:text-4xl`}>{item.title}</h1>
       {item.authors && <p className="mt-3 font-body text-base italic leading-relaxed text-[var(--ink-2)]">{item.authors}</p>}
       <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
         {item.venue}{item.venue && item.year ? " · " : ""}{item.year}

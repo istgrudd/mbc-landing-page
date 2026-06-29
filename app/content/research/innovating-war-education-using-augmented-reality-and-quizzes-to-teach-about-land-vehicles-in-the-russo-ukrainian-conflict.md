@@ -3,6 +3,7 @@ title: "Innovating War Education: Using Augmented Reality and Quizzes to Teach A
 authors: "Muhammad Ilham Fajri Pratama, Kissya Ramadhani Sudriyana"
 venue: "Paper_ARGIS_1.pdf"
 year: "2024"
+division: "Game Tech"
 order: 19
 images: []
 links: {}

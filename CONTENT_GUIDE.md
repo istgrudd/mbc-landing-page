@@ -63,6 +63,7 @@ card or the build can break. `order` must be **unique within each collection**.
 | `title` | ✅ | Paper title. |
 | `authors` | ✅ | e.g. `"A. Pratama, B. Santoso, C. Hidayat"`. |
 | `venue` | ✅ | e.g. `"IEEE Access, Vol. 12"`. |
+| `division` | ✅ | Must match a division **exactly** — see §3. |
 | `year` | ✅ | e.g. `"2025"`. |
 | `order` | ✅ | Lower = first. **Unique** among research. |
 | `images` | — | Up to 3 (figures/diagrams) — see §4. |
@@ -93,9 +94,10 @@ card or the build can break. `order` must be **unique within each collection**.
 
 ---
 
-## 3. Division values (projects only)
+## 3. Division values (projects **and** research)
 
-The `division` field must match **one of these exactly** (capitalisation matters):
+Both projects and research papers carry a `division`. The value must match **one of these
+exactly** (capitalisation matters):
 
 - `Cyber Security`
 - `Big Data`
@@ -103,7 +105,18 @@ The `division` field must match **one of these exactly** (capitalisation matters
 - `Game Tech`
 - `Practicum`
 
-A typo here (e.g. `GIS` or `game tech`) will show the wrong label or break the card.
+A typo here (e.g. `GIS` or `game tech`) will show the wrong label, hide the item from the
+division filter, and leave it out of the counts.
+
+**What the division drives automatically — no code changes needed:**
+
+- The **project / research counts** on the landing-page division cards ("3 proj · 8 rsch")
+  are tallied live from these fields. Add a file with a given division and its count goes up.
+- The **division filter chips** on the `/projects` and `/research` pages are generated from
+  the divisions that actually appear in the content.
+
+The five divisions themselves (names, colours, member counts) live in
+`app/data/divisions.js` — editing that file is a code change, not part of this content flow.
 
 ---
 
@@ -170,6 +183,7 @@ You can use **bold**, *italics*, lists, and [links](https://example.com).
 title: "Paper Title"
 authors: "A. Author, B. Author"
 venue: "Journal / Conference, Vol. X"
+division: "Big Data"
 year: "2025"
 images: []
 order: 99
@@ -219,6 +233,6 @@ minute or two the new content is live at `https://mbclaboratory.com`.
 - [ ] File name is lowercase-with-hyphens (this becomes the URL).
 - [ ] All **REQUIRED** fields are filled in.
 - [ ] `order` is unique within its collection.
-- [ ] (Projects) `division` matches one of the five values **exactly**.
+- [ ] (Projects & research) `division` matches one of the five values **exactly**.
 - [ ] Images (if any) are in `public/images/<group>/`, max 3, paths start with `/images/...`.
 - [ ] Previewed with `npm run dev` and it looks right.

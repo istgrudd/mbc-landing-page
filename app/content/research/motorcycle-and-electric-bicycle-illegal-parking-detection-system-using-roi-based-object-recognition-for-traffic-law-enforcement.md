@@ -3,6 +3,7 @@ title: "Motorcycle and Electric Bicycle Illegal Parking Detection System Using R
 authors: "Wijdanadam Rafifilmi Nadarosula, Andika Erlang Ramadhan, Alifia Azzahra"
 venue: "Conference/Journal"
 year: "2024"
+division: "Big Data"
 order: 18
 images: []
 links: {}

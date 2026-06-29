@@ -1,5 +1,7 @@
 // The five MBC Lab divisions. `color` drives the spectrum signal system used
-// across the whole site; `members` / `projects` are the live roster counts.
+// across the whole site; `members` is the live roster count. Project and
+// research counts are NOT stored here — they're derived at runtime from the
+// markdown frontmatter via `getDivisionCounts()` in lib/content.js.
 export const divisions = [
   {
     id: 'cybersec',
@@ -11,7 +13,6 @@ export const divisions = [
     description:
       'Exploring offensive and defensive security, CTF competitions, and vulnerability research — from red-team tradecraft to blue-team monitoring.',
     members: 9,
-    projects: 3,
   },
   {
     id: 'bigdata',
@@ -23,7 +24,6 @@ export const divisions = [
     description:
       'Processing large-scale datasets with modern analytics pipelines and machine learning, turning raw signals into models that hold up in production.',
     members: 12,
-    projects: 1,
   },
   {
     id: 'gis',
@@ -35,7 +35,6 @@ export const divisions = [
     description:
       'Mapping, spatial analysis, and geospatial data visualisation for real-world problems — from tourism platforms to smart-city infrastructure.',
     members: 9,
-    projects: 3,
   },
   {
     id: 'gametech',
@@ -47,7 +46,6 @@ export const divisions = [
     description:
       'Designing and developing interactive games and immersive digital experiences, with several titles registered under intellectual property rights.',
     members: 9,
-    projects: 4,
   },
   {
     id: 'practicum',
@@ -59,6 +57,5 @@ export const divisions = [
     description:
       'Hands-on laboratory sessions bridging theory and practical software engineering skills for Faculty of Electrical Engineering students.',
     members: 14,
-    projects: 0,
   },
 ]

@@ -32,3 +32,21 @@ export function getAll(group) {
 export function getBySlug(group, slug) {
   return (CONTENT[group] ?? []).find((item) => item.slug === slug) ?? null;
 }
+
+// Live per-division tally derived from the `division` frontmatter of every
+// project and research markdown file. Keyed by the canonical division name
+// (matching `divisions[].name`), so adding a new .md file with a `division:`
+// automatically bumps the count shown on the Divisions cards — no manual edits.
+export function getDivisionCounts() {
+  const counts = {};
+  const tally = (group) => {
+    for (const item of CONTENT[group]) {
+      const name = item.division?.trim();
+      if (!name) continue;
+      (counts[name] ??= { projects: 0, research: 0 })[group] += 1;
+    }
+  };
+  tally("projects");
+  tally("research");
+  return counts;
+}

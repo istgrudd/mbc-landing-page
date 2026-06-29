@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import * as Icons from 'lucide-react'
 import { ArrowUpRight } from 'lucide-react'
 import { divisions } from '../data/divisions'
+import { getDivisionCounts } from '../lib/content'
 
 /* Live "signal" motif — an equalizer recoloured per division. */
 function Signal({ color, active }) {
@@ -38,7 +39,7 @@ function Signal({ color, active }) {
   )
 }
 
-function DivisionCard({ division, index }) {
+function DivisionCard({ division, index, counts }) {
   const shouldReduce = useReducedMotion()
   const [hover, setHover] = useState(false)
   const Icon = Icons[division.icon] || Icons.Layers
@@ -89,12 +90,15 @@ function DivisionCard({ division, index }) {
       </p>
 
       <div className="relative z-10 mt-auto flex items-end justify-between pt-6">
-        <div className="flex items-baseline gap-4 font-mono text-[var(--ink-2)]">
+        <div className="flex items-baseline gap-3 font-mono text-[var(--ink-2)]">
           <span className="text-sm tnum">
             <span className="text-[var(--ink)]">{division.members}</span> members
           </span>
           <span className="text-sm tnum">
-            <span className="text-[var(--ink)]">{division.projects}</span> proj
+            <span className="text-[var(--ink)]">{counts.projects}</span> proj
+          </span>
+          <span className="text-sm tnum">
+            <span className="text-[var(--ink)]">{counts.research}</span> rsch
           </span>
         </div>
         <Signal color={division.color} active={hover} />
@@ -105,6 +109,7 @@ function DivisionCard({ division, index }) {
 
 export default function Divisions() {
   const shouldReduce = useReducedMotion()
+  const counts = getDivisionCounts()
 
   return (
     <section id="divisions" className="relative overflow-hidden bg-[var(--paper)] px-6 py-24 lg:px-10">
@@ -133,7 +138,12 @@ export default function Divisions() {
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {divisions.map((d, i) => (
-            <DivisionCard key={d.id} division={d} index={i} />
+            <DivisionCard
+              key={d.id}
+              division={d}
+              index={i}
+              counts={counts[d.name] ?? { projects: 0, research: 0 }}
+            />
           ))}
 
           {/* CTA tile completing the 3×2 grid */}

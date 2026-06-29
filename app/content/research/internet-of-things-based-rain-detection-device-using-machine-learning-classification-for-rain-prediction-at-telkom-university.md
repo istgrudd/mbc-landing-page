@@ -3,6 +3,7 @@ title: "Internet-of-Things-Based Rain Detection Device Using Machine Learning Cl
 authors: "Zaidan Muhammad Mahdi, Ghanes Mahesa Aditya, Isno Wahno Putro, Brahmantya Aji Pramudita, Dhoni Putra Setiawan"
 venue: "DOI: 10.1109/ICoDSA58501.2023.10277315"
 year: "2024"
+division: "Big Data"
 order: 2
 images: []
 links: {}
